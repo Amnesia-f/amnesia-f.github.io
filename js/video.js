@@ -15,7 +15,7 @@ function browserRedirect() {
    var bIsCE = sUserAgent.match(/windows ce/i) == "windows ce";
    var bIsWM = sUserAgent.match(/windows mobile/i) == "windows mobile";
    if (!(bIsIpad || bIsIphoneOs || bIsMidp || bIsUc7 || bIsUc || bIsAndroid || bIsCE || bIsWM)) {
-       var html = "<video loop autoplay style='height: 500;width: 500;object-fit: cover;'><source src='https://cdn.jsdelivr.net/gh/Amnesia-f/CDN/amnesia.mp4'></source></video>";
+       var html = "<video loop autoplay style='height: 100%;width: 100%;object-fit: cover;'><source src='https://cdn.jsdelivr.net/gh/Amnesia-f/CDN/amnesia.mp4'></source></video>";
        /*添加video*/
        document.getElementById("nav").innerHTML += html;
 
