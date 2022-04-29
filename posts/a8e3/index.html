@@ -1,0 +1,454 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>使用Mx_Yolo_v3训练K210模型文件 | Amnesia's blog</title><meta name="keywords" content="“Yolo,人工智能,K210”"><meta name="author" content="Amnesia"><meta name="copyright" content="Amnesia"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="详细介绍了使用Mx_Yolo_v3训练K210模型文件的过程，包括本地及线上训练的过程。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Mx_Yolo_v3训练K210模型文件">
+<meta property="og:url" content="http://amnesia-f.github.io/posts/a8e3/index.html">
+<meta property="og:site_name" content="Amnesia&#39;s blog">
+<meta property="og:description" content="详细介绍了使用Mx_Yolo_v3训练K210模型文件的过程，包括本地及线上训练的过程。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/使用Mx_Yolo_v3训练K210模型文件/封面.png、">
+<meta property="article:published_time" content="2022-04-29T16:45:14.782Z">
+<meta property="article:modified_time" content="2022-04-29T16:44:51.520Z">
+<meta property="article:author" content="Amnesia">
+<meta property="article:tag" content="Yolo">
+<meta property="article:tag" content="人工智能">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/使用Mx_Yolo_v3训练K210模型文件/封面.png、"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://amnesia-f.github.io/posts/a8e3/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-172938598-1"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-172938598-1');
+</script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":300},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: Amnesia","link":"链接: ","source":"来源: Amnesia's blog","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '使用Mx_Yolo_v3训练K210模型文件',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-04-30 00:44:51'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/css/iconfont.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/static-butterfly/dist/css/index.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/css/scrollbar.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/HCLonely/images@master/others/heartbeat.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="/css/custom/twikoo_beautify.css"  media="defer" onload="this.media='all'"><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-swiper/swiper/swiper.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-swiper/swiper/swiperstyle.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-card-history/baiduhistory/css/main.css"><link rel="stylesheet" href="https://unpkg.zhimg.com/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload="this.media='screen'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/atom.xml" title="Amnesia's blog" type="application/atom+xml">
+<link rel="alternate" href="/rss2.xml" title="Amnesia's blog" type="application/rss+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">57</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">44</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">19</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-compass"></i><span> 目录</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-file-code"></i><span> HTML游戏</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/HTML/Demo/%E5%9C%88%E5%B0%8F%E7%8C%AB.html"><i class="fa-fw fas fa-code"></i><span> 圈小猫</span></a></li><li><a class="site-page child" href="/HTML/Demo/%E8%B5%B0%E8%BF%B7%E5%AE%AB/index.html"><i class="fa-fw fas fa-code"></i><span> 走迷宫</span></a></li><li><a class="site-page child" href="/HTML/Demo/%E5%9D%A6%E5%85%8B%E5%A4%A7%E6%88%98/index.html"><i class="fa-fw fas fa-code"></i><span> 坦克大战</span></a></li><li><a class="site-page child" href="/HTML/Demo/%E9%A3%9E%E6%9C%BA%E5%A4%A7%E6%88%98/index.html"><i class="fa-fw fas fa-code"></i><span> 飞机大战</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 其他</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></li><li><a class="site-page child" href="/history/"><i class="fa-fw fas fa-link"></i><span> 建站史</span></a></li><li><a class="site-page child" href="/comments/"><i class="fa-fw fas fa-sticky-note"></i><span> 留言板</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/talking/"><i class="fa-fw fas fa-sticky-note"></i><span> 自言自语</span></a></div><div class="menus_item"><a class="site-page" href="/about/index.html"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/使用Mx_Yolo_v3训练K210模型文件/封面.png、')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Amnesia's blog</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-compass"></i><span> 目录</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-file-code"></i><span> HTML游戏</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/HTML/Demo/%E5%9C%88%E5%B0%8F%E7%8C%AB.html"><i class="fa-fw fas fa-code"></i><span> 圈小猫</span></a></li><li><a class="site-page child" href="/HTML/Demo/%E8%B5%B0%E8%BF%B7%E5%AE%AB/index.html"><i class="fa-fw fas fa-code"></i><span> 走迷宫</span></a></li><li><a class="site-page child" href="/HTML/Demo/%E5%9D%A6%E5%85%8B%E5%A4%A7%E6%88%98/index.html"><i class="fa-fw fas fa-code"></i><span> 坦克大战</span></a></li><li><a class="site-page child" href="/HTML/Demo/%E9%A3%9E%E6%9C%BA%E5%A4%A7%E6%88%98/index.html"><i class="fa-fw fas fa-code"></i><span> 飞机大战</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 其他</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></li><li><a class="site-page child" href="/history/"><i class="fa-fw fas fa-link"></i><span> 建站史</span></a></li><li><a class="site-page child" href="/comments/"><i class="fa-fw fas fa-sticky-note"></i><span> 留言板</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/talking/"><i class="fa-fw fas fa-sticky-note"></i><span> 自言自语</span></a></div><div class="menus_item"><a class="site-page" href="/about/index.html"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">使用Mx_Yolo_v3训练K210模型文件</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-04-29T16:45:14.782Z" title="发表于 2022-04-30 00:45:14">2022-04-30</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-04-29T16:44:51.520Z" title="更新于 2022-04-30 00:44:51">2022-04-30</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/">人工智能</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>3分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="使用Mx_Yolo_v3训练K210模型文件"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/posts/a8e3/#post-comment"><span id="twikoo-count"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>详细介绍了使用Mx_Yolo_v3训练K210模型文件的过程，包括本地及线上训练的过程。</p>
+<span id="more"></span>
+
+<h1 id="一、功能介绍"><a href="#一、功能介绍" class="headerlink" title="一、功能介绍"></a>一、功能介绍</h1><p>目前提供两种训练：</p>
+<ul>
+<li>目标分类： 识别图片所属的种类， 比如图中是苹果还是杯子, 没有坐标。 如下图，识别到了苹果，是苹果的概率为0.8</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/%E4%BD%BF%E7%94%A8Mx_Yolo_v3%E8%AE%AD%E7%BB%83K210%E6%A8%A1%E5%9E%8B%E6%96%87%E4%BB%B6/%E8%8B%B9%E6%9E%9C%E7%9B%AE%E6%A0%87%E5%88%86%E7%B1%BB.png" alt="苹果目标分类.png"></p>
+<ul>
+<li>目标检测： 检测图片中物体的位置， 并且输出这个物体的坐标和物体大小（即框出认识的物体）。 如下图， 识别到了苹果， 并且框出了位置， 是苹果的概率为0.8</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/%E4%BD%BF%E7%94%A8Mx_Yolo_v3%E8%AE%AD%E7%BB%83K210%E6%A8%A1%E5%9E%8B%E6%96%87%E4%BB%B6/%E8%8B%B9%E6%9E%9C%E7%9B%AE%E6%A0%87%E8%AF%86%E5%88%AB.png" alt="苹果目标识别.png"></p>
+<h1 id="二、确定方案"><a href="#二、确定方案" class="headerlink" title="二、确定方案"></a>二、确定方案</h1><ol>
+<li><p>首先确定要训练哪种模型。<br>在上面支持的模型中选择一个，如果不需要检测物体坐标， 用目标分类， 需要坐标则目标识别，<br>两者处理数据要做的工作和格式都不一样， 后者会复杂很多。</p>
+</li>
+<li><p>确定分类。 包括分类数量， 具体分类。 比如这里以识别红色小球和玩具为例:</p>
+</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/%E4%BD%BF%E7%94%A8Mx_Yolo_v3%E8%AE%AD%E7%BB%83K210%E6%A8%A1%E5%9E%8B%E6%96%87%E4%BB%B6/%E7%A1%AE%E5%AE%9A%E5%88%86%E7%B1%BB1.png" alt="确定分类1.png"><br><img src="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/%E4%BD%BF%E7%94%A8Mx_Yolo_v3%E8%AE%AD%E7%BB%83K210%E6%A8%A1%E5%9E%8B%E6%96%87%E4%BB%B6/%E7%A1%AE%E5%AE%9A%E5%88%86%E7%B1%BB2.png" alt="确定分类2.png"></p>
+<p>所以共两个分类： <code>ball</code> 和 <code>toy</code>， 我们也称之为<code>标签(label)</code>，</p>
+<blockquote>
+<p>注意！分类名（标签/label）只能使用英文字符和下划线</p>
+</blockquote>
+<ol start="3">
+<li>确定分辨率。 图片的分辨率也十分重要，不管是在采集、训练，还是使用时， 都需要十分注意， 稍不注意，模型可能就无法使用或者识别精度低。<br>以下为Maixhub目前支持的分辨率，其它分辨率将会训练失败：</li>
+</ol>
+<p>目标分类、目标检测： <code>224x224</code>（推荐）</p>
+<p>确定采集数据集（这里就是所有图片的统称）数量。 即确定好每个分类的图片数量，方便后面采集图片快速准确进行，</p>
+<h1 id="三、获取，处理数据集"><a href="#三、获取，处理数据集" class="headerlink" title="三、获取，处理数据集"></a>三、获取，处理数据集</h1><h2 id="1-采集数据"><a href="#1-采集数据" class="headerlink" title="1.采集数据"></a>1.采集数据</h2><ol>
+<li><p>图片数据的采集可以使用任意的图片采集工具。某些特定的图片数据，可能需要用k210主控板的摄像头来拍摄，这样数据使用会比较准确。</p>
+</li>
+<li><p>手机拍照， 然后使用预处理工具处理成需要的分辨率</p>
+</li>
+<li><p>可以使用网络爬虫在网络上按名称爬取图片，在Mx_yolo_v3的“工具集”菜单中，使用图片爬取工具可以爬取需要的照片。</p>
+</li>
+</ol>
+<blockquote>
+<p>注：要把无效图片去除，否则会影响训练!</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/%E4%BD%BF%E7%94%A8Mx_Yolo_v3%E8%AE%AD%E7%BB%83K210%E6%A8%A1%E5%9E%8B%E6%96%87%E4%BB%B6/%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E7%88%AC%E8%99%AB.png" alt="数据采集爬虫.png"></p>
+<p>得到图片数据后，将其导入电脑：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/%E4%BD%BF%E7%94%A8Mx_Yolo_v3%E8%AE%AD%E7%BB%83K210%E6%A8%A1%E5%9E%8B%E6%96%87%E4%BB%B6/%E5%BE%97%E5%88%B0%E5%9B%BE%E7%89%87.png" alt="得到图片.png"></p>
+<h2 id="2-处理图片分辨率"><a href="#2-处理图片分辨率" class="headerlink" title="2.处理图片分辨率"></a>2.处理图片分辨率</h2><p>打开<code>Image_tool.exe</code>软件，看到以下界面，点击<code>选择图像文件夹...</code>，选择存放采集照片的文件夹，设置分辨率为<code>224*224</code>。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/%E4%BD%BF%E7%94%A8Mx_Yolo_v3%E8%AE%AD%E7%BB%83K210%E6%A8%A1%E5%9E%8B%E6%96%87%E4%BB%B6/%E6%89%93%E5%BC%80%E5%9B%BE%E7%89%87%E5%A4%84%E7%90%86%E8%BD%AF%E4%BB%B6.png" alt="打开图片处理软件.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/%E4%BD%BF%E7%94%A8Mx_Yolo_v3%E8%AE%AD%E7%BB%83K210%E6%A8%A1%E5%9E%8B%E6%96%87%E4%BB%B6/%E6%89%93%E5%BC%80%E6%96%87%E4%BB%B6%E5%A4%B9.png" alt="打开文件夹.png"></p>
+<p>等待处理完毕后，即可得到<code>224*224</code>分辨率的图片：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/%E4%BD%BF%E7%94%A8Mx_Yolo_v3%E8%AE%AD%E7%BB%83K210%E6%A8%A1%E5%9E%8B%E6%96%87%E4%BB%B6/%E5%A4%84%E7%90%86%E5%9B%BE%E7%89%87%E5%AE%8C%E6%88%90.png" alt="处理图片完成.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/%E4%BD%BF%E7%94%A8Mx_Yolo_v3%E8%AE%AD%E7%BB%83K210%E6%A8%A1%E5%9E%8B%E6%96%87%E4%BB%B6/%E5%A4%84%E7%90%86%E5%9B%BE%E7%89%87%E5%AE%8C%E6%88%901.png" alt="处理图片完成1.png"></p>
+<h2 id="3-对图片进行更名"><a href="#3-对图片进行更名" class="headerlink" title="3.对图片进行更名"></a>3.对图片进行更名</h2><p>打开 拖把更名器 文件夹中的<code>xTools.exe</code></p>
+<p>点击菜单栏中的<code>序号</code>，接下来按照下图步骤操作即可：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/%E4%BD%BF%E7%94%A8Mx_Yolo_v3%E8%AE%AD%E7%BB%83K210%E6%A8%A1%E5%9E%8B%E6%96%87%E4%BB%B6/%E5%BA%8F%E5%8F%B7%E6%9B%B4%E5%90%8D.png" alt="序号更名.png"></p>
+<p>应用更改后即可得到按照序号排列的文件名：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/%E4%BD%BF%E7%94%A8Mx_Yolo_v3%E8%AE%AD%E7%BB%83K210%E6%A8%A1%E5%9E%8B%E6%96%87%E4%BB%B6/%E6%9B%B4%E5%90%8D%E5%AE%8C%E6%88%90.png" alt="更名完成.png"></p>
+<h2 id="4-标注图片"><a href="#4-标注图片" class="headerlink" title="4.标注图片"></a>4.标注图片</h2><p>新建一个<code>mask</code>文件夹，里面新建<code>images</code>和<code>xml</code>文件夹，将先前处理好的图片数据丢入<code>images</code>文件夹。</p>
+<p>打开<code>LabelImg</code>软件：</p>
+<ol>
+<li>更改图片所在文件夹；</li>
+<li>更改标签所在文件夹；</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/%E4%BD%BF%E7%94%A8Mx_Yolo_v3%E8%AE%AD%E7%BB%83K210%E6%A8%A1%E5%9E%8B%E6%96%87%E4%BB%B6/%E6%A0%87%E6%B3%A8%E8%BD%AF%E4%BB%B6%E9%80%89%E6%8B%A9%E6%96%87%E4%BB%B6%E5%A4%B9.png" alt="标注软件选择文件夹.png"></p>
+<ol>
+<li>点击 <code>Create RectBox</code> 进行标注；</li>
+<li>在图片上拖选出需要识别的标注部分；</li>
+<li>输入<code>标签/label</code>名，点击OK；</li>
+<li>点击 <code>Save</code> 保存；</li>
+<li>点击<code>Next Images</code> 标注下一张图片；</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/%E4%BD%BF%E7%94%A8Mx_Yolo_v3%E8%AE%AD%E7%BB%83K210%E6%A8%A1%E5%9E%8B%E6%96%87%E4%BB%B6/%E6%A0%87%E6%B3%A8%E8%BD%AF%E4%BB%B6%E6%A0%87%E6%B3%A8%E8%BF%87%E7%A8%8B.png" alt="标注软件标注过程.png"></p>
+<p>到此数据集的处理和准备工作完毕，接下来就可以开始训练模型了！</p>
+<h1 id="四、训练模型"><a href="#四、训练模型" class="headerlink" title="四、训练模型"></a>四、训练模型</h1><h2 id="1-线上Maixhub平台"><a href="#1-线上Maixhub平台" class="headerlink" title="1.线上Maixhub平台"></a>1.线上Maixhub平台</h2><h3 id="目标分类"><a href="#目标分类" class="headerlink" title="目标分类"></a>目标分类</h3><h4 id="打包数据集"><a href="#打包数据集" class="headerlink" title="打包数据集"></a>打包数据集</h4><p>将数据集按以下分支保存，</p>
+<p>并将其压缩为<code>zip</code>文件：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">datasets.zip</span><br><span class="line">            |</span><br><span class="line">            datasets</span><br><span class="line">                    |</span><br><span class="line">                     ----mask</span><br><span class="line">                    |        |</span><br><span class="line">                    |         ---<span class="number">0.</span>jpg</span><br><span class="line">                    |        |</span><br><span class="line">                    |         ---<span class="number">1.</span>jpg</span><br><span class="line">                    |        |</span><br><span class="line">                    |         ---<span class="number">2.</span>jpg</span><br><span class="line">                    |</span><br><span class="line">                     ----redbull</span><br><span class="line">                           |</span><br><span class="line">                            ---<span class="number">0.</span>jpg</span><br><span class="line">                           |</span><br><span class="line">                            ---<span class="number">1.</span>jpg</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/%E4%BD%BF%E7%94%A8Mx_Yolo_v3%E8%AE%AD%E7%BB%83K210%E6%A8%A1%E5%9E%8B%E6%96%87%E4%BB%B6/%E6%89%93%E5%8C%85%E6%95%B0%E6%8D%AE%E9%9B%861.png" alt="打包数据集1.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/%E4%BD%BF%E7%94%A8Mx_Yolo_v3%E8%AE%AD%E7%BB%83K210%E6%A8%A1%E5%9E%8B%E6%96%87%E4%BB%B6/%E6%89%93%E5%8C%85%E6%95%B0%E6%8D%AE%E9%9B%862.png" alt="打包数据集2.png"></p>
+<p>压缩文件命名为<code>datasets.zip</code>，注意大小不要超过20MB。</p>
+<h4 id="线上训练"><a href="#线上训练" class="headerlink" title="线上训练"></a>线上训练</h4><p>打开Maixhub注册地址：<a target="_blank" rel="noopener" href="https://www.maixhub.com/register">https://www.maixhub.com/register</a>，注册一个账号：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/%E4%BD%BF%E7%94%A8Mx_Yolo_v3%E8%AE%AD%E7%BB%83K210%E6%A8%A1%E5%9E%8B%E6%96%87%E4%BB%B6/%E6%B3%A8%E5%86%8C%E5%B9%B3%E5%8F%B0.png" alt="注册平台.png"></p>
+<blockquote>
+<p>注册成功后记得去邮箱激活账号。</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/%E4%BD%BF%E7%94%A8Mx_Yolo_v3%E8%AE%AD%E7%BB%83K210%E6%A8%A1%E5%9E%8B%E6%96%87%E4%BB%B6/%E6%BF%80%E6%B4%BB%E8%B4%A6%E5%8F%B7.png" alt="激活账号.png"></p>
+<p>回到首页，点击网页顶部的<code>模型训练</code></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/%E4%BD%BF%E7%94%A8Mx_Yolo_v3%E8%AE%AD%E7%BB%83K210%E6%A8%A1%E5%9E%8B%E6%96%87%E4%BB%B6/%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%831.png" alt="模型训练1.png"></p>
+<p>选择<code>物体分类</code>，点击 Next ：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/%E4%BD%BF%E7%94%A8Mx_Yolo_v3%E8%AE%AD%E7%BB%83K210%E6%A8%A1%E5%9E%8B%E6%96%87%E4%BB%B6/%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%832.png" alt="模型训练2.png"></p>
+<p>上传前面打包好的数据集：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/%E4%BD%BF%E7%94%A8Mx_Yolo_v3%E8%AE%AD%E7%BB%83K210%E6%A8%A1%E5%9E%8B%E6%96%87%E4%BB%B6/%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%833.jpg" alt="模型训练3.png"></p>
+<p>上传完成后点击<code>Submit</code>，之后耐心等待即可：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/%E4%BD%BF%E7%94%A8Mx_Yolo_v3%E8%AE%AD%E7%BB%83K210%E6%A8%A1%E5%9E%8B%E6%96%87%E4%BB%B6/%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%834.png" alt="模型训练4.png"></p>
+<p>等待一段时间训练完成后，来到此界面，点击 Download 下载训练好的模型文件：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/%E4%BD%BF%E7%94%A8Mx_Yolo_v3%E8%AE%AD%E7%BB%83K210%E6%A8%A1%E5%9E%8B%E6%96%87%E4%BB%B6/%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%835.png" alt="模型训练5.png"></p>
+<p>下载回来得到以下文件，将其全部丢入K210板的sd卡中，上电之后即可实现简单的目标分类功能：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/%E4%BD%BF%E7%94%A8Mx_Yolo_v3%E8%AE%AD%E7%BB%83K210%E6%A8%A1%E5%9E%8B%E6%96%87%E4%BB%B6/%E8%AE%AD%E7%BB%83%E7%BB%93%E6%9E%9C%E4%B8%8B%E8%BD%BD%E5%8E%8B%E7%BC%A9%E5%8C%85.png" alt="训练结果下载压缩包.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/%E4%BD%BF%E7%94%A8Mx_Yolo_v3%E8%AE%AD%E7%BB%83K210%E6%A8%A1%E5%9E%8B%E6%96%87%E4%BB%B6/%E5%88%86%E7%B1%BB%E8%AF%86%E5%88%AB%E6%95%88%E6%9E%9C.png" alt="分类识别效果.png"></p>
+</article><div class="post-copyright"><div class="post-copyright__title"><span class="post-copyright-info"><h>使用Mx_Yolo_v3训练K210模型文件</h></span></div><div class="post-copyright__type"><span class="post-copyright-info"><a href="http://amnesia-f.github.io/posts/a8e3/">http://amnesia-f.github.io/posts/a8e3/</a></span></div><div class="post-copyright-m"><div class="post-copyright-m-info"><div class="post-copyright-a"><h>作者</h><div class="post-copyright-cc-info"><h>Amnesia</h></div></div><div class="post-copyright-c"><h>发布于</h><div class="post-copyright-cc-info"><h>2022-04-30</h></div></div><div class="post-copyright-u"><h>更新于</h><div class="post-copyright-cc-info"><h>2022-04-30</h></div></div><div class="post-copyright-c"><h>许可协议</h><div class="post-copyright-cc-info"><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a rel="noopener" target="_blank" title="CC BY-NC-SA 4.0" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></div></div></div></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Yolo/">Yolo</a><a class="post-meta__tags" href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/">人工智能</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/使用Mx_Yolo_v3训练K210模型文件/封面.png、" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/posts/ce04/"><img class="next-cover" src="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/无视限制升级安装Windows11/cover.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">无视限制升级安装Windows11</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Amnesia</div><div class="author-info__description">零碎的岛屿总会找到海.</div></div><div class="card-info-data is-center"><div class="card-info-data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">57</div></a></div><div class="card-info-data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">44</div></a></div><div class="card-info-data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">19</div></a></div></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://amnesia-f.gitee.io/"><i class="fab fa-github"></i><span>国内镜像站</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Amnesia-f" target="_blank" title="Github"><i class="iconfont  iconGitHub"></i></a><a class="social-icon" href="https://twitter.com/Amnesia79047925" target="_blank" title="Twitter"><i class="iconfont  icontwitter1"></i></a><a class="social-icon" href="mailto:f3586454827@gmail.com" target="_blank" title="Mail"><i class="iconfont  iconemail"></i></a><a class="social-icon" href="https://amnesia-f.github.io/rss2.xml" target="_blank" title="RSS"><i class="iconfont  iconrss"></i></a><a class="social-icon" href="https://space.bilibili.com/552857266" target="_blank" title="Bilibili"><i class="iconfont  iconbilibili-line"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">因不可抗力的因素，原博客文件丢失，<br/> 且学业繁忙，断更数月有余。<br/> 特乘寒假之日，对博客重新部署，<br/> 原有文章已悉数找回，保留了原有博客主题。<br/> 预计在2月10日前，恢复博客运行。<br/> 祝大家虎年虎虎生威，新春快乐！<br/> 欢迎访问我的<a href="https://amnesia-f.github.io/">Github主页</a>！<br/> <br/>          By Amnesia on 29th January 2022.<br/> <img src="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/Yay.gif"><br/></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%8A%9F%E8%83%BD%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">一、功能介绍</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%A1%AE%E5%AE%9A%E6%96%B9%E6%A1%88"><span class="toc-number">2.</span> <span class="toc-text">二、确定方案</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E8%8E%B7%E5%8F%96%EF%BC%8C%E5%A4%84%E7%90%86%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="toc-number">3.</span> <span class="toc-text">三、获取，处理数据集</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E9%87%87%E9%9B%86%E6%95%B0%E6%8D%AE"><span class="toc-number">3.1.</span> <span class="toc-text">1.采集数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%A4%84%E7%90%86%E5%9B%BE%E7%89%87%E5%88%86%E8%BE%A8%E7%8E%87"><span class="toc-number">3.2.</span> <span class="toc-text">2.处理图片分辨率</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%AF%B9%E5%9B%BE%E7%89%87%E8%BF%9B%E8%A1%8C%E6%9B%B4%E5%90%8D"><span class="toc-number">3.3.</span> <span class="toc-text">3.对图片进行更名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%A0%87%E6%B3%A8%E5%9B%BE%E7%89%87"><span class="toc-number">3.4.</span> <span class="toc-text">4.标注图片</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B"><span class="toc-number">4.</span> <span class="toc-text">四、训练模型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%BA%BF%E4%B8%8AMaixhub%E5%B9%B3%E5%8F%B0"><span class="toc-number">4.1.</span> <span class="toc-text">1.线上Maixhub平台</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E6%A0%87%E5%88%86%E7%B1%BB"><span class="toc-number">4.1.1.</span> <span class="toc-text">目标分类</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%89%93%E5%8C%85%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="toc-number">4.1.1.1.</span> <span class="toc-text">打包数据集</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BA%BF%E4%B8%8A%E8%AE%AD%E7%BB%83"><span class="toc-number">4.1.1.2.</span> <span class="toc-text">线上训练</span></a></li></ol></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/a8e3/" title="使用Mx_Yolo_v3训练K210模型文件"><img src="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/使用Mx_Yolo_v3训练K210模型文件/封面.png、" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="使用Mx_Yolo_v3训练K210模型文件"/></a><div class="content"><a class="title" href="/posts/a8e3/" title="使用Mx_Yolo_v3训练K210模型文件">使用Mx_Yolo_v3训练K210模型文件</a><time datetime="2022-04-29T16:45:14.782Z" title="发表于 2022-04-30 00:45:14">2022-04-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/ce04/" title="无视限制升级安装Windows11"><img src="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/无视限制升级安装Windows11/cover.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无视限制升级安装Windows11"/></a><div class="content"><a class="title" href="/posts/ce04/" title="无视限制升级安装Windows11">无视限制升级安装Windows11</a><time datetime="2022-04-17T12:47:35.000Z" title="发表于 2022-04-17 20:47:35">2022-04-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/6ec6/" title="为AppInventor添加在线更新功能"><img src="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/为AppInventor添加在线更新功能/封面.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="为AppInventor添加在线更新功能"/></a><div class="content"><a class="title" href="/posts/6ec6/" title="为AppInventor添加在线更新功能">为AppInventor添加在线更新功能</a><time datetime="2022-02-27T09:30:58.000Z" title="发表于 2022-02-27 17:30:58">2022-02-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/m762/" title="基于物联网的师生呼叫系统"><img src="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/基于物联网的师生呼叫系统/cover.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="基于物联网的师生呼叫系统"/></a><div class="content"><a class="title" href="/posts/m762/" title="基于物联网的师生呼叫系统">基于物联网的师生呼叫系统</a><time datetime="2022-02-04T09:30:58.000Z" title="发表于 2022-02-04 17:30:58">2022-02-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/4e5b/" title="Hexo博客美化日记 || Amnesia's Blog"><img src="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/Hexo博客美化日记/封面.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hexo博客美化日记 || Amnesia's Blog"/></a><div class="content"><a class="title" href="/posts/4e5b/" title="Hexo博客美化日记 || Amnesia's Blog">Hexo博客美化日记 || Amnesia's Blog</a><time datetime="2022-02-03T02:36:34.531Z" title="发表于 2022-02-03 10:36:34">2022-02-03</time></div></div></div></div></div></div></main><footer id="footer" style="background: -webkit-linear-gradient( 0deg, rgba(247, 149, 51, 0.1) 0, rgba(243, 112, 85, 0.1) 15%, rgba(239, 78, 123, 0.1) 30%, rgba(161, 102, 171, 0.1) 44%, rgba(80, 115, 184, 0.1) 58%, rgba(16, 152, 173, 0.1) 72%, rgba(7, 179, 155, 0.1) 86%, rgba(109, 186, 130, 0.1) 100% )"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022  <i id="heartbeat" class="fa fas fa-heartbeat"></i> Amnesia</div><div id="running-time"></div><div class="footer_custom_text"><p><a style="margin-inline:5px" target="_blank" href="https://hexo.io/"><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&logo=hexo" title="博客框架为Hexo"></a><a style="margin-inline:5px" target="_blank" href="https://butterfly.js.org/"><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&logo=bitdefender" title="主题采用Butterfly"></a><a style="margin-inline:5px" target="_blank" href="https://www.jsdelivr.com/"><img src="https://img.shields.io/badge/CDN-jsDelivr-orange?style=flat&logo=jsDelivr" title="本站使用JsDelivr为静态资源提供CDN加速"></a><a style="margin-inline:5px" target="_blank" href="https://vercel.com/ "><img src="https://img.shields.io/badge/Hosted-Vervel-brightgreen?style=flat&logo=Vercel" title="本站采用双线部署，默认线路托管于Vercel"></a><a style="margin-inline:5px" target="_blank" href="https://gitee.com/ "><img src="https://img.shields.io/badge/Hosted-Gitee-0cedbe?style=flat&logo=Gitee" title="本站采用双线部署，国内镜像托管于Gitee"></a><a style="margin-inline:5px" target="_blank" href="https://github.com/"><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&logo=GitHub" title="本站项目由Gtihub托管"></a><a style="margin-inline:5px" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&logo=Claris" title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"></a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">本地搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>(()=>{
+  const init = () => {
+    twikoo.init(Object.assign({
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo-comment-teal.vercel.app/',
+      region: '',
+      onCommentLoaded: function () {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.vemoji)'))
+      }
+    }, null))
+  }
+
+  const getCount = () => {
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo-comment-teal.vercel.app/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      document.getElementById('twikoo-count').innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const runFn = () => {
+    init()
+    GLOBAL_CONFIG_SITE.isPost && getCount()
+  }
+
+  const loadTwikoo = () => {
+    if (typeof twikoo === 'object') {
+      setTimeout(runFn,0)
+      return
+    } 
+    getScript('https://cdn.jsdelivr.net/npm/twikoo/dist/twikoo.all.min.js').then(runFn)
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><script defer src="https://cdn.jsdelivr.net/gh/graingert/wow@1.3.0/dist/wow.min.js"></script><script defer data-pjax src="/js/wow_init.js"></script><script>setInterval(()=>{let create_time=Math.round(new Date("2021-1-20-10:36:38").getTime()/1000);let timestamp=Math.round((new Date().getTime()+8*60*60*1000)/1000);let second=timestamp-create_time;let time=new Array(0,0,0,0,0);if(second>=365*24*3600){time[0]=parseInt(second/(365*24*3600));second%=365*24*3600}if(second>=24*3600){time[1]=parseInt(second/(24*3600));second%=24*3600}if(second>=3600){time[2]=parseInt(second/3600);second%=3600}if(second>=60){time[3]=parseInt(second/60);second%=60}if(second>0){time[4]=second}currentTimeHtml='小破站已经安全运行 '+time[0]+' 年 '+time[1]+' 天 '+time[2]+' 时 '+time[3]+' 分 '+time[4]+' 秒';var elementById=document.getElementById('running-time');if(elementById){elementById.innerHTML=currentTimeHtml}},1000);</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: true,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', 'UA-172938598-1', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start -->
+  <script data-pjax src="https://cdn.jsdelivr.net/gh/Zfour/hexo-github-calendar@1.21/hexo_githubcalendar.js"></script>
+  <script data-pjax>
+        function GithubCalendarConfig(){
+            var git_githubapiurl ="https://python-github-calendar-api-eight.vercel.app/api/?Amnesia-f?Amnesia-f";
+            var git_color =['#ebedf0', '#fdcdec', '#fc9bd9', '#fa6ac5', '#f838b2', '#f5089f', '#c4067e', '#92055e', '#540336', '#48022f', '#30021f'];
+            var git_user ="Amnesia-f";
+            var parent_div_git = document.getElementById('recent-posts');
+            var git_div_html = '<div class="recent-post-item" style="width:100%;height:auto;padding:10px;"><div id="github_loading" style="width:10%;height:100%;margin:0 auto;display: block"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"  viewBox="0 0 50 50" style="enable-background:new 0 0 50 50" xml:space="preserve"><path fill="#d0d0d0" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z" transform="rotate(275.098 25 25)"><animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"></animateTransform></path></svg></div><div id="github_container"></div></div>';
+            if(parent_div_git && location.pathname =='/'){
+                console.log('已挂载github calendar')
+                // parent_div_git.innerHTML=git_div_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",git_div_html) // 有报错，但不影响使用(支持pjax跳转)
+            };
+            GithubCalendar(git_githubapiurl,git_color,git_user)
+        }
+        if(document.getElementById('recent-posts')){
+            GithubCalendarConfig()
+        }
+    </script>
+    <style>#github_container{min-height:280px}@media screen and (max-width:650px) {#github_container{background-image:;min-height:0px}}</style>
+    <style></style> <script data-pjax>if(document.getElementById('recent-posts') && location.pathname =='/'){
+    
+    var parent = document.getElementById('recent-posts');
+    var child = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms"><div class="blog-slider__img"><img src="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/Hexo搭建个人博客：从开始到放弃/hexo.jpg" alt="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/Hexo搭建个人博客：从开始到放弃/hexo.jpg"/></div><div class="blog-slider__content"><span class="blog-slider__code">2021-01-21</span><a class="blog-slider__title" href="posts/aea2/">Hexo搭建个人博客：从开始到放弃</a><div class="blog-slider__text">非常友好的小白向教程，详细介绍了搭建Hexo博客的步骤。</div><a class="blog-slider__button" href="posts/aea2/">详情</a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms"><div class="blog-slider__img"><img src="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/部署Twikoo评论系统及其邮件推送(Vercel)/封面.png" alt="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/部署Twikoo评论系统及其邮件推送(Vercel)/封面.png"/></div><div class="blog-slider__content"><span class="blog-slider__code">2022-02-01</span><a class="blog-slider__title" href="posts/8b3/">部署Twikoo评论系统及其邮件推送(Vercel)</a><div class="blog-slider__text">详细介绍了使用Vercel+MongoDB方案搭建Twikoo评论系统的过程，并实现邮件自动通知回复信息。</div><a class="blog-slider__button" href="posts/8b3/">详情</a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms"><div class="blog-slider__img"><img src="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/阿里云IoT：控制掌控板板载灯亮灭/封面.png" alt="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/阿里云IoT：控制掌控板板载灯亮灭/封面.png"/></div><div class="blog-slider__content"><span class="blog-slider__code">2021-02-07</span><a class="blog-slider__title" href="posts/c232/">阿里云IoT：控制掌控板板载灯亮灭</a><div class="blog-slider__text">使用阿里云IoT+App+掌控板的方式控制灯光的亮灭，其中涉及到阿里云物联网平台以及MQTT协议的介绍。</div><a class="blog-slider__button" href="posts/c232/">详情</a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms"><div class="blog-slider__img"><img src="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/Day8：一款无线抢答系统的实现过程/cover.jpg" alt="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/Day8：一款无线抢答系统的实现过程/cover.jpg"/></div><div class="blog-slider__content"><span class="blog-slider__code">2021-08-08</span><a class="blog-slider__title" href="posts/d9a3/">Day8：一款无线抢答系统的实现过程</a><div class="blog-slider__text">基于LoRa+蓝牙+掌控板+AppInventor方案实现的一款无线抢答系统，通过手机App下达答题命令到裁判端，再由裁判端分发命令并捕捉抢答信息。</div><a class="blog-slider__button" href="posts/d9a3/">详情</a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms"><div class="blog-slider__img"><img src="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/Hexo博客技巧：利用JsDeliver加速文件/封面.jpg" alt="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/Hexo博客技巧：利用JsDeliver加速文件/封面.jpg"/></div><div class="blog-slider__content"><span class="blog-slider__code">2021-02-10</span><a class="blog-slider__title" href="posts/20b3/">Hexo博客技巧：利用JsDeliver加速文件</a><div class="blog-slider__text">利用GitHub+JsDeliver搭建CDN图床，加快Hexo博客的加载速度，同时还能减少担心图片挂掉的后顾之忧。</div><a class="blog-slider__button" href="posts/20b3/">详情</a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms"><div class="blog-slider__img"><img src="https://pic.imgdb.cn/item/61f639662ab3f51d916ed633.png" alt="https://pic.imgdb.cn/item/61f639662ab3f51d916ed633.png"/></div><div class="blog-slider__content"><span class="blog-slider__code">2021-07-15</span><a class="blog-slider__title" href="posts/77049f2e/">Day4：蓝牙4.0与5.0模块的使用</a><div class="blog-slider__text">详细介绍了蓝牙4.0与5.0模块的使用，文章中提供了配置、指令、引脚等大量资料。</div><a class="blog-slider__button" href="posts/77049f2e/">详情</a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms"><div class="blog-slider__img"><img src="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/%E8%AE%BA%E5%AF%86%E7%A0%81%E7%AE%A1%E7%90%86/%E5%B0%81%E9%9D%A2.png" alt="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/%E8%AE%BA%E5%AF%86%E7%A0%81%E7%AE%A1%E7%90%86/%E5%B0%81%E9%9D%A2.png"/></div><div class="blog-slider__content"><span class="blog-slider__code">2021-03-01</span><a class="blog-slider__title" href="posts/6746a1c3/">论密码管理</a><div class="blog-slider__text">免费，开源，离线化的密码管理方案。</div><a class="blog-slider__button" href="posts/6746a1c3/">详情</a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms"><div class="blog-slider__img"><img src="https://img.imgdb.cn/item/6028903bd2a061fec7b181f3.png" alt="https://img.imgdb.cn/item/6028903bd2a061fec7b181f3.png"/></div><div class="blog-slider__content"><span class="blog-slider__code">2021-02-15</span><a class="blog-slider__title" href="posts/461b0433/">掌控板在上传模式下无法连接MQTT的解决方法</a><div class="blog-slider__text">如题，掌控板在上传模式下无法连接MQTT的解决方法(SIoT)。</div><a class="blog-slider__button" href="posts/461b0433/">详情</a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms"><div class="blog-slider__img"><img src="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/QuickLook%EF%BC%9A%E8%83%BD%E6%8C%89%E4%B8%80%E4%B8%8B%E7%A9%BA%E6%A0%BC%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%8C%89%E4%B8%A4%E4%B8%8B%E9%BC%A0%E6%A0%87/%E5%B0%81%E9%9D%A2.png" alt="https://cdn.jsdelivr.net/gh/Amnesia-f/jsDelivr_CDN/post/QuickLook%EF%BC%9A%E8%83%BD%E6%8C%89%E4%B8%80%E4%B8%8B%E7%A9%BA%E6%A0%BC%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%8C%89%E4%B8%A4%E4%B8%8B%E9%BC%A0%E6%A0%87/%E5%B0%81%E9%9D%A2.png"/></div><div class="blog-slider__content"><span class="blog-slider__code">2021-03-04</span><a class="blog-slider__title" href="posts/adf6e4b/">QuickLook：能按一下空格为什么要按两下鼠标</a><div class="blog-slider__text">QuickLook是一款开源、免费的文件快速预览辅助工具，可以将MacOS广受好评的“空格预览”功能带到Windows桌面！</div><a class="blog-slider__button" href="posts/adf6e4b/">详情</a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载swiper')
+    parent.insertAdjacentHTML("afterbegin",child)}
+     </script>
+<script data-pjax src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-swiper/swiper/swiper.min.js"></script>
+<script data-pjax src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-swiper@0.18/swiper/swiperindex.js"></script>
+<style></style><script data-pjax>function history_calendar_injector_config(){
+                var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+                var item_html = '<div class="card-widget card-history"><div class="card-content"><div class="item-headline"><i class="fas fa-clock fa-spin"></i><span>那年今日</span></div><div id="history-baidu" style="height: 100px;overflow: hidden"><div class="history_swiper-container" id="history-container" style="width: 100%;height: 100%"><div class="swiper-wrapper" id="history_container_wrapper" style="height:20px"></div></div></div></div>';
+                console.log('已挂载history_calendar')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('sticky_layout')[0] && (location.pathname ==='/'|| '/' ==='all')){
+
+            history_calendar_injector_config()
+        } </script><script data-pjax src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-card-history/baiduhistory/js/main.js"></script><div class="js-pjax"><script async="async">var arr = document.getElementsByClassName('recent-post-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '2s');
+    arr[i].setAttribute('data-wow-delay', '500ms');
+    arr[i].setAttribute('data-wow-offset', '80');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-widget');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script></div><script defer src="https://unpkg.zhimg.com/hexo-butterfly-wowjs/lib/wow.min.js"></script><script defer src="https://unpkg.zhimg.com/hexo-butterfly-wowjs/lib/wow_init.js"></script><!-- hexo injector body_end end --><script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>
