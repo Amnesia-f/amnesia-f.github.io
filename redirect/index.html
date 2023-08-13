@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Aciano - 跳转提示</title>
+    <link rel="icon" href="https://aciano.top/img/favicon.png" sizes="16x16">
+    <style>
+        body {
+            background-color: #f8f8f8;
+            font-family: PingFang SC, Hiragino Sans GB, Microsoft JhengHei, Microsoft YaHei, sans-serif;
+            background-image: url("https://api.maho.cc/random-img/pc.php");
+            background-repeat: no-repeat;
+            background-size: 100% auto;
+        }
+        .box .tip-box {
+            position: absolute;
+            left: 50%;
+            top: 30%;
+            max-width: 624px;
+            width: 86%;
+            background-color: #fff;
+            transform: translateX(-50%);
+            padding: 30px 40px 0;
+            box-sizing: border-box;
+            border: 1px solid #e5e6eb;
+            border-radius: 2px;
+        }
+
+        .box .tip-box .content .title {
+            font-size: 18px;
+            line-height: 24px;
+        }
+
+        .box .tip-box .content #link {
+            padding: 16px 0 24px;
+            border-bottom: 1px solid #e5e6eb;
+            position: relative;
+            color: gray;
+            font-size: 14px;
+        }
+
+        .box .tip-box .content .btn {
+            display: block;
+            margin: 20px 0 24px auto;
+            color: #fff;
+            border-radius: 3px;
+            border: none;
+            background: #007fff;
+            height: 32px;
+            font-size: 14px;
+            padding: 0 14px;
+            cursor: pointer;
+            outline: 0;
+        }
+
+        #site-name {
+            color: #E25A53;
+        }
+
+        /* 手机端自适应 */
+
+        @media only screen and (max-width: 600px) {
+            .box .tip-box {
+                max-width: 100%;
+                width: 100%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                border: none;
+                border-radius: 0;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="box">
+    <div class="tip-box">
+        <div class="content">
+            <div class="content">
+                <div class="title">
+                    即将离开 <a href="https://aciano.top" target="_blank" id="site-name">Aciano</a>&#10;
+                </div>
+                <div class="title">
+                    前往第三方网站，请注意账号财产安全
+                </div>
+                <div id="link"></div>
+                <button class="btn" onclick="navigateToTarget()">
+                    <span id="countdown">5</span> 秒后继续访问
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    const query = window.location.href.split("?")[1] || "";
+    let target = query.split("target=")[1] || "";
+    target = window.decodeURIComponent(target);
+    document.getElementById("link").innerText = target
+
+    // 跳转页面
+    var navigateToTarget = function () {
+        if (!target) {
+            return;
+        }
+        window.location.href = target;
+    }
+
+    // 倒计时
+    var countdownEl = document.getElementById('countdown');
+    var countdown = 5;
+
+    var updateCountdown = function () {
+        countdown--;
+        countdownEl.innerText = countdown;
+
+        if (countdown === 0) {
+            navigateToTarget();
+        } else {
+            setTimeout(updateCountdown, 1000);
+        }
+    }
+
+    setTimeout(updateCountdown, 1000);
+</script>
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>
