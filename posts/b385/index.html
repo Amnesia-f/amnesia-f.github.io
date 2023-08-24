@@ -1,0 +1,447 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"><title>Day6：LoRa模块的使用 | Aciano</title><meta name="keywords" content="学习笔记,LoRa"><meta name="author" content="Aciano"><meta name="copyright" content="Aciano"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#f7f9fe"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-touch-fullscreen" content="yes"><meta name="apple-mobile-web-app-title" content="Day6：LoRa模块的使用"><meta name="application-name" content="Day6：LoRa模块的使用"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="#f7f9fe"><meta property="og:type" content="article"><meta property="og:title" content="Day6：LoRa模块的使用"><meta property="og:url" content="https://aciano.top/posts/b385/index.html"><meta property="og:site_name" content="Aciano"><meta property="og:description" content="本文介绍了LoRa模块的组网通讯方式以及组网跳级，详细说明了LoRa模块间互相通讯的步骤和方法。同时提供了继电器连接的电路图和程序。   模块设置完全对等的透明组网模式设置方法模块类型一致并都为主模块类型，用户接口模式一致并都为透明模式。 在此种组网模式下，每个模块串口接收到数据，都透明的广播发送到"><meta property="og:locale" content="zh-CN"><meta property="og:image" content="https://cdn1.tianli0.top/npm/aciano-cdn@1.0.13/post/Day6：LoRa模块的使用/封面.png"><meta property="article:author" content="Aciano"><meta property="article:tag"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://cdn1.tianli0.top/npm/aciano-cdn@1.0.13/post/Day6：LoRa模块的使用/封面.png"><meta name="description" content="本文介绍了LoRa模块的组网通讯方式以及组网跳级，详细说明了LoRa模块间互相通讯的步骤和方法。同时提供了继电器连接的电路图和程序。   模块设置完全对等的透明组网模式设置方法模块类型一致并都为主模块类型，用户接口模式一致并都为透明模式。 在此种组网模式下，每个模块串口接收到数据，都透明的广播发送到"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://aciano.top/posts/b385/"><link rel="preconnect" href="//npm.elemecdn.com"/><link rel="preconnect" href="//npm.onmicrosoft.cn"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="google-site-verification" content="LkcGRYU00JQD-xcW5-DDwNKOwrdx6z6MlJjtMTMYYZc"/><meta name="baidu-site-verification" content="code-xxx"/><meta name="msvalidate.01" content="xxx"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.cbd.int/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/@fancyapps/ui@5.0.20/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn1.tianli0.top/npm/anzhiyu-theme-static@1.0.0/swiper/swiper.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  linkPageTop: {"enable":true,"title":"与数百名博主无限进步","addFriendPlaceholder":"name：\nlink（要求博客地址，请勿提交个人主页）：\navatar（头像url，请提供尽可能清晰的图片）：\ndescr（描述）：\nsiteshot（站点截图）："},
+  postHeadAiDescription: undefined,
+  diytitle: undefined,
+  LA51: {"enable":true,"ck":"JkBRJKVhvzOtUvfR","LingQueMonitorID":"JkBRjKUcH5mD7KzS"},
+  greetingBox: {"enable":true,"default":"晚上好👋","list":[{"greeting":"晚安😴","startTime":0,"endTime":5},{"greeting":"早上好鸭👋, 祝你一天好心情！","startTime":6,"endTime":9},{"greeting":"上午好👋, 状态很好，鼓励一下～","startTime":10,"endTime":10},{"greeting":"11点多啦, 在坚持一下就吃饭啦～","startTime":11,"endTime":11},{"greeting":"午安👋, 宝贝","startTime":12,"endTime":14},{"greeting":"🌈充实的一天辛苦啦！","startTime":14,"endTime":18},{"greeting":"19点喽, 奖励一顿丰盛的大餐吧🍔。","startTime":19,"endTime":19},{"greeting":"晚上好👋, 在属于自己的时间好好放松😌~","startTime":20,"endTime":24}]},
+  twikooEnvId: 'https://twikoo.aciano.top/',
+  commentBarrageConfig:undefined,
+  root: '/',
+  preloader: {"source":3},
+  friends_vue_info: undefined,
+  navMusic: true,
+  mainTone: {"mode":"api","api":"https://color.aciano.top/api?img=","cover_change":true},
+  authorStatus: undefined,
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简","rightMenuMsgToTraditionalChinese":"转为繁体","rightMenuMsgToSimplifiedChinese":"转为简体"},
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":330},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    simplehomepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"copy":true,"copyrightEbable":false,"limitCount":50,"languages":{"author":"作者: Aciano","link":"链接: ","source":"来源: Aciano","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。","copySuccess":"复制成功，复制和转载请标注本文地址"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#3b70fc","bgDark":"#1f1f1f","position":"top-center"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.cbd.int/flickr-justified-gallery@2.1.2/dist/fjGallery.min.js',
+      css: 'https://cdn.cbd.int/flickr-justified-gallery@2.1.2/dist/fjGallery.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  shortcutKey: undefined,
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  configTitle: 'Aciano',
+  title: 'Day6：LoRa模块的使用',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-07-03 23:32:13',
+  postMainColor: '',
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#18171d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#f7f9fe')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.2.0"><link rel="alternate" href="/atom.xml" title="Aciano" type="application/atom+xml">
+<link rel="alternate" href="/rss2.xml" title="Aciano" type="application/rss+xml">
+</head><body data-type="anzhiyu"><div id="web_bg"></div><div id="an_music_bg"></div><div id="loading-box" onclick="document.getElementById(&quot;loading-box&quot;).classList.add(&quot;loaded&quot;)"><div class="loading-bg"><img class="loading-img nolazyload" alt="加载头像" src="https://cdn1.tianli0.top/npm/aciano-cdn@1.0.13/avatar.jpg"/><div class="loading-image-dot"></div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.getElementById('loading-box').classList.add("loaded");
+  },
+  initLoading: () => {
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+window.addEventListener('load',()=> { preloader.endLoading() })
+setTimeout(function(){preloader.endLoading();},10000)
+
+if (true) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/progress_bar/progress_bar.css"/><script async="async" src="https://cdn.cbd.int/pace-js@1.2.4/pace.min.js" data-pace-options="{ &quot;restartOnRequestAfter&quot;:false,&quot;eventLag&quot;:false}"></script><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><div id="nav-group"><span id="blog_name"><a id="site-name" href="/" accesskey="h"><div class="title">Aciano</div><i class="anzhiyufont anzhiyu-icon-house-chimney"></i></a></span><div class="mask-name-container"><div id="name-container"><a id="page-name" href="javascript:anzhiyu.scrollToDest(0, 500)" rel="external nofollow noreferrer">PAGE_NAME</a></div></div><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);" rel="external nofollow noreferrer"><span> 文章</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><i class="anzhiyufont anzhiyu-icon-box-archive faa-tada" style="font-size: 0.9em;"></i><span> 隧道</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><i class="anzhiyufont anzhiyu-icon-shapes faa-tada" style="font-size: 0.9em;"></i><span> 分类</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags faa-tada" style="font-size: 0.9em;"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);" rel="external nofollow noreferrer"><span> 友链</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/link/"><i class="anzhiyufont anzhiyu-icon-link faa-tada" style="font-size: 0.9em;"></i><span> 友人帐</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/comments/"><i class="anzhiyufont anzhiyu-icon-envelope faa-tada" style="font-size: 0.9em;"></i><span> 留言板</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);" rel="external nofollow noreferrer"><span> 我的</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/music/?id=6647175851&amp;server=netease"><i class="anzhiyufont anzhiyu-icon-music faa-tada" style="font-size: 0.9em;"></i><span> 音乐馆</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/equipment/"><i class="anzhiyufont anzhiyu-icon-dice-d20 faa-tada" style="font-size: 0.9em;"></i><span> 我的装备</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);" rel="external nofollow noreferrer"><span> 关于</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/about/"><i class="anzhiyufont anzhiyu-icon-paper-plane faa-tada" style="font-size: 0.9em;"></i><span> 关于本人</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/history/"><i class="anzhiyufont anzhiyu-icon-artstation faa-tada" style="font-size: 0.9em;"></i><span> 建站史</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/essay/"><i class="anzhiyufont anzhiyu-icon-lightbulb faa-tada" style="font-size: 0.9em;"></i><span> 闲言碎语</span></a></li></ul></div></div></div><div id="nav-right"><div class="nav-button" id="randomPost_button"><a class="site-page" onclick="toRandomPost()" title="随机前往一个文章" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="anzhiyufont anzhiyu-icon-dice"></i></a></div><div class="nav-button" id="search-button"><a class="site-page social-icon search" href="javascript:void(0);" rel="external nofollow noreferrer" title="搜索🔍" accesskey="s"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span> 搜索</span></a></div><input id="center-console" type="checkbox"/><label class="widget" for="center-console" title="中控台" onclick="anzhiyu.switchConsole();"><i class="left"></i><i class="widget center"></i><i class="widget right"></i></label><div id="console"><div class="console-card-group-reward"><ul class="reward-all console-card"><li class="reward-item"><a href="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-weichat.png" rel="external nofollow noreferrer" target="_blank"><img class="post-qr-code-img" alt="微信" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-weichat.png"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-alipay.png" rel="external nofollow noreferrer" target="_blank"><img class="post-qr-code-img" alt="支付宝" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-alipay.png"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div><div class="console-card-group"><div class="console-card-group-left"><div class="console-card" id="card-newest-comments"><div class="card-content"><div class="author-content-item-tips">互动</div><span class="author-content-item-title"> <span>最新评论</span></span></div><div class="aside-list"><span>正在加载中...</span></div></div></div><div class="console-card-group-right"><div class="console-card tags"><div class="card-content"><div class="author-content-item-tips">音乐</div><span class="author-content-item-title">灵魂的碰撞💥</span></div></div><div class="console-card history"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-box-archiv"></i><span>文章</span></div><div class="card-archives"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-archive"></i><span>归档</span><a class="card-more-btn" href="/archives/" title="查看更多">
+    <i class="anzhiyufont anzhiyu-icon-angle-right"></i></a></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/08/"><span class="card-archive-list-date">八月 2023</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">1</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/07/"><span class="card-archive-list-date">七月 2023</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">5</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/08/"><span class="card-archive-list-date">八月 2022</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">8</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/07/"><span class="card-archive-list-date">七月 2022</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">6</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/04/"><span class="card-archive-list-date">四月 2022</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">1</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/02/"><span class="card-archive-list-date">二月 2022</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">3</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2021/08/"><span class="card-archive-list-date">八月 2021</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">2</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2021/07/"><span class="card-archive-list-date">七月 2021</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">7</span><span>篇</span></div></a></li></ul></div><hr/></div></div></div><div class="button-group"><div class="console-btn-item"><a class="darkmode_switchbutton" onclick="anzhiyu.switchDarkMode()" title="显示模式切换" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="anzhiyufont anzhiyu-icon-moon"></i></a></div><div class="console-btn-item" id="consoleHideAside" onclick="anzhiyu.hideAsideBtn()" title="边栏显示控制"><a class="asideSwitch"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></a></div><div class="console-btn-item on" id="consoleCommentBarrage" onclick="anzhiyu.switchCommentBarrage()" title="热评开关"><a class="commentBarrage"><i class="anzhiyufont anzhiyu-icon-message"></i></a></div><div class="console-btn-item" id="consoleMusic" onclick="anzhiyu.musicToggle()" title="音乐开关"><a class="music-switch"><i class="anzhiyufont anzhiyu-icon-music"></i></a></div></div><div class="console-mask" onclick="anzhiyu.hideConsole()" href="javascript:void(0);" rel="external nofollow noreferrer"></div></div><div class="nav-button" id="nav-totop"><a class="totopbtn" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i><span id="percent" onclick="anzhiyu.scrollToDest(0,500)">0</span></a></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);" rel="external nofollow noreferrer" title="切换"><i class="anzhiyufont anzhiyu-icon-bars"></i></a></div></div></div></nav><div id="post-info"><div id="post-firstinfo"><div class="meta-firstline"><a class="post-meta-original">原创</a><span class="post-meta-categories"><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-inbox post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url">学习笔记</a></span><span class="article-meta tags"><a class="article-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>学习笔记</span></a><a class="article-meta__tags" href="/tags/LoRa/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>LoRa</span></a></span></div></div><h1 class="post-title" itemprop="name headline">Day6：LoRa模块的使用</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="anzhiyufont anzhiyu-icon-calendar-days post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" itemprop="dateCreated datePublished" datetime="2021-07-15T14:20:16.000Z" title="发表于 2021-07-15 22:20:16">2021-07-15</time><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-history post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" itemprop="dateCreated datePublished" datetime="2023-07-03T15:32:13.139Z" title="更新于 2023-07-03 23:32:13">2023-07-03</time></span></div><div class="meta-secondline"><span class="post-meta-separator"></span><span class="post-meta-wordcount"><i class="anzhiyufont anzhiyu-icon-file-word post-meta-icon" title="文章字数"></i><span class="post-meta-label" title="文章字数">字数总计:</span><span class="word-count" title="文章字数">730</span><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-clock post-meta-icon" title="阅读时长"></i><span class="post-meta-label" title="阅读时长">阅读时长:</span><span>2分钟</span></span><span class="post-meta-separator"></span><span class="post-meta-pv-cv" id="" data-flag-title="Day6：LoRa模块的使用"><i class="anzhiyufont anzhiyu-icon-fw-eye post-meta-icon"></i><span class="post-meta-label" title="阅读量">阅读量:</span><span id="busuanzi_value_page_pv"><i class="anzhiyufont anzhiyu-icon-spinner anzhiyu-spin"></i></span></span><span class="post-meta-separator">       </span><span class="post-meta-position" title="作者IP属地为广东"><i class="anzhiyufont anzhiyu-icon-location-dot"></i>广东</span></div></div></div><section class="main-hero-waves-area waves-area"><svg class="waves-svg" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto"><defs><path id="gentle-wave" d="M -160 44 c 30 0 58 -18 88 -18 s 58 18 88 18 s 58 -18 88 -18 s 58 18 88 18 v 44 h -352 Z"></path></defs><g class="parallax"><use href="#gentle-wave" x="48" y="0"></use><use href="#gentle-wave" x="48" y="3"></use><use href="#gentle-wave" x="48" y="5"></use><use href="#gentle-wave" x="48" y="7"></use></g></svg></section><div id="post-top-cover"><img class="nolazyload" id="post-top-bg" src="https://cdn1.tianli0.top/npm/aciano-cdn@1.0.13/post/Day6：LoRa模块的使用/封面.png"></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container" itemscope itemtype="https://aciano.top/posts/b385/"><header><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url">学习笔记</a><a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" tabindex="-1" itemprop="url">学习笔记</a><a href="/tags/LoRa/" tabindex="-1" itemprop="url">LoRa</a><h1 id="CrawlerTitle" itemprop="name headline">Day6：LoRa模块的使用</h1><span itemprop="author" itemscope itemtype="http://schema.org/Person">Aciano</span><time itemprop="dateCreated datePublished" datetime="2021-07-15T14:20:16.000Z" title="发表于 2021-07-15 22:20:16">2021-07-15</time><time itemprop="dateCreated datePublished" datetime="2023-07-03T15:32:13.139Z" title="更新于 2023-07-03 23:32:13">2023-07-03</time></header><p>本文介绍了LoRa模块的组网通讯方式以及组网跳级，详细说明了LoRa模块间互相通讯的步骤和方法。同时提供了继电器连接的电路图和程序。</p>
+<span id="more"></span>
+
+<h1 id="模块设置"><a href="#模块设置" class="headerlink" title="模块设置"></a>模块设置</h1><h2 id="完全对等的透明组网模式设置方法"><a href="#完全对等的透明组网模式设置方法" class="headerlink" title="完全对等的透明组网模式设置方法"></a>完全对等的透明组网模式设置方法</h2><p>模块类型一致并都为<strong>主模块类型</strong>，用户接口模式一致并都为<strong>透明模式</strong>。 在此种组网模式下，每个模块串口接收到数据，都透明的广播发送到其它的模块，模块接收到别的模块发送的数据为纯透明的应用<br>数据。用户设备只能发广播数据，不需要管理其它模块的通讯短地址。</p>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><p>1.按1、2、3顺序读取当前模块的参数配置。<br>2.红色的参数设置成<strong>一样</strong>，蓝色圈选的<code>信道</code>和<code>网络ID</code>同一小组的设置成一样；绿色圈选的<code>模块地址</code>各人都不一样。<br>3.点<code>写配置</code>。<br><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn1.tianli0.top/npm/aciano-cdn@1.0.13/post/Day6%EF%BC%9ALoRa%E6%A8%A1%E5%9D%97%E7%9A%84%E4%BD%BF%E7%94%A8/1.png" alt="1.png"><br><strong>配置成功时软件发送框和接收框会分别显示下图信息↓</strong><br><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn1.tianli0.top/npm/aciano-cdn@1.0.13/post/Day6%EF%BC%9ALoRa%E6%A8%A1%E5%9D%97%E7%9A%84%E4%BD%BF%E7%94%A8/2.png" alt="2.png"></p>
+<h1 id="测试通讯"><a href="#测试通讯" class="headerlink" title="测试通讯"></a>测试通讯</h1><p>1、官方配置和测试工具（只能收发16进制）：<br><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn1.tianli0.top/npm/aciano-cdn@1.0.13/post/Day6%EF%BC%9ALoRa%E6%A8%A1%E5%9D%97%E7%9A%84%E4%BD%BF%E7%94%A8/3.png" alt="3.png"><br>2、可使用Xcom、sscom等串口调试软件，原理与官方工具相同，这里不作演示。</p>
+<h1 id="发送程序"><a href="#发送程序" class="headerlink" title="发送程序"></a>发送程序</h1><p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn1.tianli0.top/npm/aciano-cdn@1.0.13/post/Day6%EF%BC%9ALoRa%E6%A8%A1%E5%9D%97%E7%9A%84%E4%BD%BF%E7%94%A8/screenshots-%E5%8F%91%E9%80%81.png" alt="screenshots-发送.png"></p>
+<h1 id="接收程序"><a href="#接收程序" class="headerlink" title="接收程序"></a>接收程序</h1><p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn1.tianli0.top/npm/aciano-cdn@1.0.13/post/Day6%EF%BC%9ALoRa%E6%A8%A1%E5%9D%97%E7%9A%84%E4%BD%BF%E7%94%A8/screenshots-%E6%8E%A5%E6%94%B6.png" alt="screenshots-接收.png"><br>其实就是普通的串口收发程序，与前两天的蓝牙接收程序大同小异。</p>
+<h1 id="模块介绍"><a href="#模块介绍" class="headerlink" title="模块介绍"></a>模块介绍</h1><h2 id="组网跳级介绍"><a href="#组网跳级介绍" class="headerlink" title="组网跳级介绍"></a>组网跳级介绍</h2><p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn1.tianli0.top/npm/aciano-cdn@1.0.13/post/Day6%EF%BC%9ALoRa%E6%A8%A1%E5%9D%97%E7%9A%84%E4%BD%BF%E7%94%A8/4.png" alt="4.png"></p>
+<h2 id="MESH-多径路由"><a href="#MESH-多径路由" class="headerlink" title="MESH 多径路由"></a>MESH 多径路由</h2><p>MESH 路由协议会综合多种选择算法进行路由的筛选，包括距离矢量、信号质量（链路状态）和节点剩余电量。</p>
+<h3 id="1、MESH-链路状态算法路由选择"><a href="#1、MESH-链路状态算法路由选择" class="headerlink" title="1、MESH 链路状态算法路由选择"></a>1、MESH 链路状态算法路由选择</h3><p>距离矢量算法根据目的地的远近来决定的路径，每个节点都会维护一张矢量表，表中列出了当前已知的到每个目标的最佳距离。</p>
+<p>节点可以根据这张矢量表，选择比自己更接近目的地的节点作为转发路由。根据距离矢量算法可以找到两个节点间的最近路径，但不一定是最佳路径。</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn1.tianli0.top/npm/aciano-cdn@1.0.13/post/Day6%EF%BC%9ALoRa%E6%A8%A1%E5%9D%97%E7%9A%84%E4%BD%BF%E7%94%A8/5.png" alt="5.png"></p>
+<h3 id="2、MESH-链路状态算法路由选择"><a href="#2、MESH-链路状态算法路由选择" class="headerlink" title="2、MESH 链路状态算法路由选择"></a>2、MESH 链路状态算法路由选择</h3><p>路由协议必须能够正确选择信号质量好、链路稳定的路径才能保证网络的稳定性、实时性、可靠性和抗干扰能力。</p>
+<p>MESH 路由协议能够迅速探测多条路由的即时链路质量，能在极短时间内选择出最佳链路质量的路径做路由，并且在必要时可以选择次最近路径作为路由。</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn1.tianli0.top/npm/aciano-cdn@1.0.13/post/Day6%EF%BC%9ALoRa%E6%A8%A1%E5%9D%97%E7%9A%84%E4%BD%BF%E7%94%A8/6.png" alt="6.png"></p>
+<h3 id="3、MESH-节点剩余电量路由选择"><a href="#3、MESH-节点剩余电量路由选择" class="headerlink" title="3、MESH 节点剩余电量路由选择"></a>3、MESH 节点剩余电量路由选择</h3><p>MESH 路由协议采用类 MMBCRR（Min-Max Battery Cost Routing） 算法，会自动选择剩余电量相对大的节点做路由。<br><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn1.tianli0.top/npm/aciano-cdn@1.0.13/post/Day6%EF%BC%9ALoRa%E6%A8%A1%E5%9D%97%E7%9A%84%E4%BD%BF%E7%94%A8/7.png" alt="7.png"></p>
+<h1 id="继电器连接"><a href="#继电器连接" class="headerlink" title="继电器连接"></a>继电器连接</h1><h2 id="电路接线图"><a href="#电路接线图" class="headerlink" title="电路接线图"></a>电路接线图</h2><p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn1.tianli0.top/npm/aciano-cdn@1.0.13/post/Day6%EF%BC%9ALoRa%E6%A8%A1%E5%9D%97%E7%9A%84%E4%BD%BF%E7%94%A8/%E6%8E%A5%E7%BA%BF%E5%9B%BE.png" alt="接线图.png"></p>
+<h2 id="程序"><a href="#程序" class="headerlink" title="程序"></a>程序</h2><p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn1.tianli0.top/npm/aciano-cdn@1.0.13/post/Day6%EF%BC%9ALoRa%E6%A8%A1%E5%9D%97%E7%9A%84%E4%BD%BF%E7%94%A8/screenshots-%E7%BB%A7%E7%94%B5%E5%99%A8.png" alt="screenshots-继电器.png"></p>
+</article><div class="post-copyright"><div class="copyright-cc-box"><i class="anzhiyufont anzhiyu-icon-copyright"></i></div><div class="post-copyright__author_box"><a class="post-copyright__author_img" href="/" title="头像"><img class="post-copyright__author_img_back" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn1.tianli0.top/npm/aciano-cdn@1.0.13/avatar.jpg" title="头像" alt="头像"><img class="post-copyright__author_img_front" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn1.tianli0.top/npm/aciano-cdn@1.0.13/avatar.jpg" title="头像" alt="头像"></a><div class="post-copyright__author_name">Aciano</div><div class="post-copyright__author_desc">Aciano.top</div></div><div class="post-copyright__post__info"><a class="post-copyright__original" title="该文章为原创文章，注意版权协议" href="https://aciano.top/posts/b385/">原创</a><a class="post-copyright-title"><span onclick="rm.copyPageUrl('https://aciano.top/posts/b385/')">Day6：LoRa模块的使用</span></a></div><div class="post-tools" id="post-tools"><div class="post-tools-left"><div class="rewardLeftButton"></div><div class="shareRight"><div class="share-link mobile"><div class="share-qrcode"><div class="share-button" title="使用手机访问这篇文章"><i class="anzhiyufont anzhiyu-icon-qrcode"></i></div><div class="share-main"><div class="share-main-all"><div id="qrcode" title="https://aciano.top/posts/b385/"></div><div class="reward-dec">使用手机访问这篇文章</div></div></div></div></div><div class="share-link weibo"><a class="share-button" target="_blank" href="https://service.weibo.com/share/share.php?title=Day6：LoRa模块的使用&amp;url=https://aciano.top/posts/b385/&amp;pic=https://cdn1.tianli0.top/npm/aciano-cdn@1.0.13/post/Day6：LoRa模块的使用/封面.png" rel="external nofollow noreferrer noopener"><i class="anzhiyufont anzhiyu-icon-weibo"></i></a></div><div class="share-link copyurl"><div class="share-button" id="post-share-url" title="复制链接" onclick="rm.copyPageUrl()"><i class="anzhiyufont anzhiyu-icon-link"></i></div></div></div></div></div><div class="post-copyright__notice"><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://aciano.top" target="_blank">Aciano</a>！</span></div></div><div class="post-tools-right"><div class="tag_share"><div class="post-meta__box"><div class="post-meta__box__category-list"><a class="post-meta__box__categoryes" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"><span class="categoryes-punctuation"> <i class="anzhiyufont anzhiyu-icon-inbox"></i></span>学习笔记<span class="categoryesPageCount">11</span></a></div><div class="post-meta__box__tag-list"><a class="post-meta__box__tags" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>学习笔记<span class="tagsPageCount">12</span></a><a class="post-meta__box__tags" href="/tags/LoRa/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>LoRa<span class="tagsPageCount">3</span></a></div></div></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/posts/e46d226a/"><img class="prev-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://pic.imgdb.cn/item/61f638902ab3f51d916df13f.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Day5：蓝牙5.0模块与AppInventor通讯</div></div></a></div><div class="next-post pull-right"><a href="/posts/997c/"><img class="next-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Day7：一款无线抢答系统的设计思路</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="anzhiyufont anzhiyu-icon-thumbs-up fa-fw" style="font-size: 1.5rem; margin-right: 4px"></i><span>猜你喜欢</span></div><div class="relatedPosts-list"><div><a href="/posts/997c/" title="Day7：一款无线抢答系统的设计思路"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2021-07-15</div><div class="title">Day7：一款无线抢答系统的设计思路</div></div></a></div><div><a href="/posts/d9a3/" title="Day8：一款无线抢答系统的实现过程"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn1.tianli0.top/npm/aciano-cdn@1.0.13/post/Day8：一款无线抢答系统的实现过程/cover.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2021-08-08</div><div class="title">Day8：一款无线抢答系统的实现过程</div></div></a></div><div><a href="/posts/c291af82/" title="Day1：智能问答对话程序与智能灯系列"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2021-07-11</div><div class="title">Day1：智能问答对话程序与智能灯系列</div></div></a></div><div><a href="/posts/f20cb9c8/" title="Day2：党史问答系统"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2021-07-12</div><div class="title">Day2：党史问答系统</div></div></a></div><div><a href="/posts/817b8e0e/" title="Day3：控制MP3模块"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2021-07-14</div><div class="title">Day3：控制MP3模块</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="anzhiyufont anzhiyu-icon-comments"></i><span> 评论</span></div><div class="comment-randomInfo"><a onclick="anzhiyu.addRandomCommentInfo()" href="javascript:void(0)" rel="external nofollow noreferrer">匿名评论</a><a href="/privacy" style="margin-left: 4px">隐私政策</a></div><div class="comment-tips" id="comment-tips"><span>✅ 你无需删除空行，直接评论以获取最佳展示效果</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div><div class="comment-barrage"></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-content"><div class="author-info__sayhi" id="author-info__sayhi" onclick="anzhiyu.changeSayHelloText()"></div><div class="author-info-avatar" title="点击展开"><img class="avatar-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn1.tianli0.top/npm/aciano-cdn@1.0.13/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__description"><div style="line-height:1.38;margin:0.6rem 0;text-align:justify;color:rgba(255, 255, 255, 0.8);">Hi！欢迎来到我的博客，这里有我在学习过程中记录的<b style="color:#fff">笔记</b>和<b style="color:#fff">教程</b>，便于我在遗忘后重新复现，若同时能帮到你的话，那我会非常开心！</div><div style="line-height:1.38;margin:0.6rem 0;text-align:justify;color:rgba(255, 255, 255, 0.8);">如果你觉得我写的还不错，不妨留个言吧！在顶部菜单栏可以跳转到其他界面哦，最后祝你拥有愉快的一天！</div></div><div class="author-info__bottom-group"><a class="author-info__bottom-group-left" href="/"><h1 class="author-info__name">Aciano</h1><div class="author-info__desc">Aciano.top</div></a><div class="card-info-social-icons is-center"><a class="social-icon faa-parent animated-hover" href="https://github.com/Amnesia-f" rel="external nofollow noreferrer" target="_blank" title="Github"><i class="anzhiyufont anzhiyu-icon-github"></i></a><a class="social-icon faa-parent animated-hover" href="https://space.bilibili.com/552857266" rel="external nofollow noreferrer" target="_blank" title="BiliBili"><i class="anzhiyufont anzhiyu-icon-bilibili"></i></a></div></div></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-bullhorn anzhiyu-shake"></i><span>公告</span></div><div class="announcement_content">博客更换了新的主题，功能和外观都已趋于完善，开始养老！(bushi)<br/>接下来是住宿的高中生活，只有周日能回家，博客会暂停维护和更新一大段时间。<br/> <br/>          2023年8月7日 <br/><br/> <img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn1.tianli0.top/npm/aciano-cdn@1.0.10/Yay.gif"><br/></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-bars"></i><span>文章目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A8%A1%E5%9D%97%E8%AE%BE%E7%BD%AE"><span class="toc-number">1.</span> <span class="toc-text">模块设置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%8C%E5%85%A8%E5%AF%B9%E7%AD%89%E7%9A%84%E9%80%8F%E6%98%8E%E7%BB%84%E7%BD%91%E6%A8%A1%E5%BC%8F%E8%AE%BE%E7%BD%AE%E6%96%B9%E6%B3%95"><span class="toc-number">1.1.</span> <span class="toc-text">完全对等的透明组网模式设置方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.2.</span> <span class="toc-text">步骤</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E9%80%9A%E8%AE%AF"><span class="toc-number">2.</span> <span class="toc-text">测试通讯</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%91%E9%80%81%E7%A8%8B%E5%BA%8F"><span class="toc-number">3.</span> <span class="toc-text">发送程序</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8E%A5%E6%94%B6%E7%A8%8B%E5%BA%8F"><span class="toc-number">4.</span> <span class="toc-text">接收程序</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D"><span class="toc-number">5.</span> <span class="toc-text">模块介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%84%E7%BD%91%E8%B7%B3%E7%BA%A7%E4%BB%8B%E7%BB%8D"><span class="toc-number">5.1.</span> <span class="toc-text">组网跳级介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MESH-%E5%A4%9A%E5%BE%84%E8%B7%AF%E7%94%B1"><span class="toc-number">5.2.</span> <span class="toc-text">MESH 多径路由</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81MESH-%E9%93%BE%E8%B7%AF%E7%8A%B6%E6%80%81%E7%AE%97%E6%B3%95%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9"><span class="toc-number">5.2.1.</span> <span class="toc-text">1、MESH 链路状态算法路由选择</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81MESH-%E9%93%BE%E8%B7%AF%E7%8A%B6%E6%80%81%E7%AE%97%E6%B3%95%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9"><span class="toc-number">5.2.2.</span> <span class="toc-text">2、MESH 链路状态算法路由选择</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81MESH-%E8%8A%82%E7%82%B9%E5%89%A9%E4%BD%99%E7%94%B5%E9%87%8F%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9"><span class="toc-number">5.2.3.</span> <span class="toc-text">3、MESH 节点剩余电量路由选择</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BB%A7%E7%94%B5%E5%99%A8%E8%BF%9E%E6%8E%A5"><span class="toc-number">6.</span> <span class="toc-text">继电器连接</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%B5%E8%B7%AF%E6%8E%A5%E7%BA%BF%E5%9B%BE"><span class="toc-number">6.1.</span> <span class="toc-text">电路接线图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A8%8B%E5%BA%8F"><span class="toc-number">6.2.</span> <span class="toc-text">程序</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-history"></i><span>最近发布</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/c/" title="VSCode配置C/C++环境"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn1.tianli0.top/npm/aciano-cdn@1.0.18/post/VSCode配置CC++环境/cover.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="VSCode配置C/C++环境"/></a><div class="content"><a class="title" href="/posts/c/" title="VSCode配置C/C++环境">VSCode配置C/C++环境</a><time datetime="2023-08-07T10:13:35.546Z" title="发表于 2023-08-07 18:13:35">2023-08-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/3362/" title="省赛总结·轻舟已过万重山"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn1.tianli0.top/npm/aciano-cdn@1.0.18/post/省赛总结·轻舟已过万重山/cover.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="省赛总结·轻舟已过万重山"/></a><div class="content"><a class="title" href="/posts/3362/" title="省赛总结·轻舟已过万重山">省赛总结·轻舟已过万重山</a><time datetime="2023-07-22T04:23:58.000Z" title="发表于 2023-07-22 12:23:58">2023-07-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/73ac/" title="Python纯代码实现连接SIoT"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://img.imgdb.cn/item/6026a47c3ffa7d37b3cfefb3.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Python纯代码实现连接SIoT"/></a><div class="content"><a class="title" href="/posts/73ac/" title="Python纯代码实现连接SIoT">Python纯代码实现连接SIoT</a><time datetime="2023-07-17T09:37:02.273Z" title="发表于 2023-07-17 17:37:02">2023-07-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/1b30/" title="论如何将视频导出为图片及批量对文件进行更名"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn1.tianli0.top/npm/aciano-cdn@1.0.17/post/论如何将视频导出为图片及批量对文件进行更名/cover.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="论如何将视频导出为图片及批量对文件进行更名"/></a><div class="content"><a class="title" href="/posts/1b30/" title="论如何将视频导出为图片及批量对文件进行更名">论如何将视频导出为图片及批量对文件进行更名</a><time datetime="2023-07-16T15:45:25.555Z" title="发表于 2023-07-16 23:45:25">2023-07-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/opencv/" title="OpenCV及k210实现形状检测并计算面积比"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn1.tianli0.top/npm/aciano-cdn@1.0.15/post/OpenCV及k210实现形状检测并计算面积比/cover.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="OpenCV及k210实现形状检测并计算面积比"/></a><div class="content"><a class="title" href="/posts/opencv/" title="OpenCV及k210实现形状检测并计算面积比">OpenCV及k210实现形状检测并计算面积比</a><time datetime="2023-07-12T14:06:05.030Z" title="发表于 2023-07-12 22:06:05">2023-07-12</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div id="footer_deal"><a class="deal_link" href="mailto:3586454827@qq.com" rel="external nofollow noreferrer" title="Email"><i class="anzhiyufont anzhiyu-icon-envelope"></i></a><a class="deal_link" target="_blank" rel="noopener external nofollow noreferrer" href="https://music.163.com/#/user/home?id=3322170308" title="Netease"><i class="fa-solid fa-comment"></i></a><a class="deal_link" target="_blank" rel="noopener external nofollow noreferrer" href="https://twitter.com/Amnesia79047925" title="Twitter"><i class="fa-brands fa-twitter"></i></a><img class="footer_mini_logo" title="返回顶部" alt="返回顶部" onclick="anzhiyu.scrollToDest(0, 500)" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn1.tianli0.top/npm/aciano-cdn@1.0.13/avatar.jpg" size="50px"/><a class="deal_link" target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/Amnesia-f" title="Github"><i class="anzhiyufont anzhiyu-icon-github"></i></a><a class="deal_link" target="_blank" rel="noopener external nofollow noreferrer" href="https://space.bilibili.com/552857266" title="Bilibili"><i class="anzhiyufont anzhiyu-icon-bilibili"></i></a><a class="deal_link" href="/atom.xml" title="RSS"><i class="anzhiyufont anzhiyu-icon-rss"></i></a></div><div id="anzhiyu-footer"><div class="footer-group"><div class="footer-title">服务</div><div class="footer-links"><a class="footer-item" title="51la统计" target="_blank" rel="noopener external nofollow noreferrer" href="https://v6.51.la/">51la统计</a><a class="footer-item" title="Vercel" target="_blank" rel="noopener external nofollow noreferrer" href="https://vercel.com/">Vercel</a><a class="footer-item" title="AnZhiYu" target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.anheyu.com/">AnZhiYu</a><a class="footer-item" title="GitHub" target="_blank" rel="noopener external nofollow noreferrer" href="https://www.github.com/">GitHub</a></div></div><div class="footer-group"><div class="footer-title">分类</div><div class="footer-links"><a class="footer-item" title="Hexo博客" href="/categories/Hexo%E5%8D%9A%E5%AE%A2">Hexo博客</a><a class="footer-item" title="IoT物联网" href="/categories/IoT%E7%89%A9%E8%81%94%E7%BD%91">IoT物联网</a><a class="footer-item" title="技术教程" href="/categories/%E6%8A%80%E6%9C%AF%E6%95%99%E7%A8%8B">技术教程</a><a class="footer-item" title="查看全部" href="/categories/">查看全部</a></div></div><div class="footer-group"><div class="footer-title">导航</div><div class="footer-links"><a class="footer-item" title="关于我" href="/about/">关于我</a><a class="footer-item" title="即刻短文" href="/essay/">即刻短文</a><a class="footer-item" title="留言板" href="/comments/">留言板</a><a class="footer-item" title="建站历史" href="/history/">建站历史</a></div></div><div class="footer-group"><div class="footer-title">协议</div><div class="footer-links"><a class="footer-item" title="隐私协议" href="/privacy/">隐私协议</a><a class="footer-item" title="Cookies" href="/cookies/">Cookies</a><a class="footer-item" title="版权协议" href="/copyright/">版权协议</a></div></div><div class="footer-group"><div class="footer-title-group"><div class="footer-title">友链</div><a class="random-friends-btn" id="footer-random-friends-btn" href="javascript:addFriendLinksInFooter();" rel="external nofollow noreferrer" title="换一批友情链接"><i class="anzhiyufont anzhiyu-icon-arrow-rotate-right"></i></a></div><div class="footer-links" id="friend-links-in-footer"></div></div></div></div><div id="footer-bar"><div class="footer-bar-links"><div class="footer-bar-left"><div id="footer-bar-tips"><div class="copyright">&copy;2020 - 2023 By <a class="footer-bar-link" href="/" title="Aciano" target="_blank">Aciano</a></div></div><div id="footer-type-tips"></div></div><div class="footer-bar-right"><a class="footer-bar-link" target="_blank" rel="noopener external nofollow noreferrer" href="https://icp.gov.moe/?keyword=20220645" title="萌ICP备 20220645号">萌ICP备 20220645号</a><a class="footer-bar-link cc" href="/copyright" title="cc协议"><i class="anzhiyufont anzhiyu-icon-copyright-line"></i><i class="anzhiyufont anzhiyu-icon-creative-commons-by-line"></i><i class="anzhiyufont anzhiyu-icon-creative-commons-nc-line"></i><i class="anzhiyufont anzhiyu-icon-creative-commons-nd-line"></i></a></div></div></div></footer><script defer>var hasShownPopup = sessionStorage.getItem('sessionNegotiatePopupShown');
+
+if (!hasShownPopup) {
+  setTimeout(() => {
+    anzhiyuPopupManager && anzhiyuPopupManager.enqueuePopup('协议提醒助手', '查看本站为你的个人隐私做出的努力', '/privacy', 4000);
+    sessionStorage.setItem('sessionNegotiatePopupShown', 'true');
+  }, 1000);
+}
+</script></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn1.tianli0.top/npm/aciano-cdn@1.0.13/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);" rel="external nofollow noreferrer"><span> 文章</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><i class="anzhiyufont anzhiyu-icon-box-archive faa-tada" style="font-size: 0.9em;"></i><span> 隧道</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><i class="anzhiyufont anzhiyu-icon-shapes faa-tada" style="font-size: 0.9em;"></i><span> 分类</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags faa-tada" style="font-size: 0.9em;"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);" rel="external nofollow noreferrer"><span> 友链</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/link/"><i class="anzhiyufont anzhiyu-icon-link faa-tada" style="font-size: 0.9em;"></i><span> 友人帐</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/comments/"><i class="anzhiyufont anzhiyu-icon-envelope faa-tada" style="font-size: 0.9em;"></i><span> 留言板</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);" rel="external nofollow noreferrer"><span> 我的</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/music/?id=6647175851&amp;server=netease"><i class="anzhiyufont anzhiyu-icon-music faa-tada" style="font-size: 0.9em;"></i><span> 音乐馆</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/equipment/"><i class="anzhiyufont anzhiyu-icon-dice-d20 faa-tada" style="font-size: 0.9em;"></i><span> 我的装备</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);" rel="external nofollow noreferrer"><span> 关于</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/about/"><i class="anzhiyufont anzhiyu-icon-paper-plane faa-tada" style="font-size: 0.9em;"></i><span> 关于本人</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/history/"><i class="anzhiyufont anzhiyu-icon-artstation faa-tada" style="font-size: 0.9em;"></i><span> 建站史</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/essay/"><i class="anzhiyufont anzhiyu-icon-lightbulb faa-tada" style="font-size: 0.9em;"></i><span> 闲言碎语</span></a></li></ul></div></div><span class="sidebar-menu-item-title">标签</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/App-Inventor/" style="font-size: 0.88rem; color: rgb(48, 91, 95);">App Inventor<sup>2</sup></a><a href="/tags/Arduino/" style="font-size: 0.88rem; color: rgb(158, 136, 46);">Arduino<sup>2</sup></a><a href="/tags/C/" style="font-size: 0.88rem; color: rgb(158, 189, 171);">C<sup>1</sup></a><a href="/tags/GitHub/" style="font-size: 0.88rem; color: rgb(54, 3, 33);">GitHub<sup>1</sup></a><a href="/tags/Hexo/" style="font-size: 0.88rem; color: rgb(142, 32, 107);">Hexo<sup>20</sup></a><a href="/tags/K210/" style="font-size: 0.88rem; color: rgb(40, 165, 156);">K210<sup>1</sup></a><a href="/tags/KMS/" style="font-size: 0.88rem; color: rgb(13, 67, 8);">KMS<sup>1</sup></a><a href="/tags/LoRa/" style="font-size: 0.88rem; color: rgb(31, 137, 118);">LoRa<sup>3</sup></a><a href="/tags/PC/" style="font-size: 0.88rem; color: rgb(43, 194, 64);">PC<sup>6</sup></a><a href="/tags/Python/" style="font-size: 0.88rem; color: rgb(138, 20, 77);">Python<sup>4</sup></a><a href="/tags/SIoT/" style="font-size: 0.88rem; color: rgb(24, 187, 77);">SIoT<sup>3</sup></a><a href="/tags/Windows/" style="font-size: 0.88rem; color: rgb(7, 66, 108);">Windows<sup>4</sup></a><a href="/tags/Yolo/" style="font-size: 0.88rem; color: rgb(12, 180, 147);">Yolo<sup>1</sup></a><a href="/tags/%E4%B8%AA%E4%BA%BA%E6%96%87%E7%AB%A0/" style="font-size: 0.88rem; color: rgb(95, 176, 189);">个人文章<sup>1</sup></a><a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" style="font-size: 0.88rem; color: rgb(112, 12, 126);">人工智能<sup>4</sup></a><a href="/tags/%E5%88%B7%E6%9C%BA/" style="font-size: 0.88rem; color: rgb(197, 171, 50);">刷机<sup>3</sup></a><a href="/tags/%E5%8D%9A%E5%AE%A2/" style="font-size: 0.88rem; color: rgb(91, 96, 39);">博客<sup>20</sup></a><a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 0.88rem; color: rgb(3, 142, 113);">学习笔记<sup>12</sup></a><a href="/tags/%E6%8A%80%E5%B7%A7/" style="font-size: 0.88rem; color: rgb(179, 177, 123);">技巧<sup>1</sup></a><a href="/tags/%E6%8A%80%E6%9C%AF%E6%95%99%E7%A8%8B/" style="font-size: 0.88rem; color: rgb(178, 169, 109);">技术教程<sup>10</sup></a><a href="/tags/%E6%95%99%E7%A8%8B/" style="font-size: 0.88rem; color: rgb(14, 127, 46);">教程<sup>3</sup></a><a href="/tags/%E6%B8%B8%E6%88%8F/" style="font-size: 0.88rem; color: rgb(129, 1, 68);">游戏<sup>1</sup></a><a href="/tags/%E7%89%A9%E8%81%94%E7%BD%91/" style="font-size: 0.88rem; color: rgb(142, 164, 15);">物联网<sup>7</sup></a><a href="/tags/%E7%B3%BB%E7%BB%9F%E5%A2%9E%E5%BC%BA/" style="font-size: 0.88rem; color: rgb(2, 6, 141);">系统增强<sup>1</sup></a><a href="/tags/%E8%BD%AF%E4%BB%B6%E6%BF%80%E6%B4%BB/" style="font-size: 0.88rem; color: rgb(63, 98, 101);">软件激活<sup>1</sup></a><a href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/" style="font-size: 0.88rem; color: rgb(21, 69, 173);">阿里云<sup>2</sup></a></div></div><hr/></div></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="anzhiyufont anzhiyu-icon-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="anzhiyufont anzhiyu-icon-gear"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="anzhiyufont anzhiyu-icon-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="anzhiyufont anzhiyu-icon-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></button></div></div><div id="nav-music"><a id="nav-music-hoverTips" onclick="anzhiyu.musicToggle()" accesskey="m">播放音乐</a><div id="console-music-bg"></div><meting-js id="6647175851" server="netease" type="playlist" mutex="true" preload="none" theme="var(--anzhiyu-main)" data-lrctype="0" order="random"></meting-js></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="anzhiyufont anzhiyu-icon-xmark"></i></button></nav><div class="is-center" id="loading-database"><i class="anzhiyufont anzhiyu-icon-spinner anzhiyu-pulse-icon"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div id="rightMenu"><div class="rightMenu-group rightMenu-small"><div class="rightMenu-item" id="menu-backward"><i class="anzhiyufont anzhiyu-icon-arrow-left"></i></div><div class="rightMenu-item" id="menu-forward"><i class="anzhiyufont anzhiyu-icon-arrow-right"></i></div><div class="rightMenu-item" id="menu-refresh"><i class="anzhiyufont anzhiyu-icon-arrow-rotate-right" style="font-size: 1rem;"></i></div><div class="rightMenu-item" id="menu-top"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></div></div><div class="rightMenu-group rightMenu-line rightMenuPlugin"><div class="rightMenu-item" id="menu-copytext"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制选中文本</span></div><div class="rightMenu-item" id="menu-pastetext"><i class="anzhiyufont anzhiyu-icon-paste"></i><span>粘贴文本</span></div><a class="rightMenu-item" id="menu-commenttext"><i class="anzhiyufont anzhiyu-icon-comment-medical"></i><span>引用到评论</span></a><div class="rightMenu-item" id="menu-newwindow"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开</span></div><div class="rightMenu-item" id="menu-copylink"><i class="anzhiyufont anzhiyu-icon-link"></i><span>复制链接地址</span></div><div class="rightMenu-item" id="menu-copyimg"><i class="anzhiyufont anzhiyu-icon-images"></i><span>复制此图片</span></div><div class="rightMenu-item" id="menu-downloadimg"><i class="anzhiyufont anzhiyu-icon-download"></i><span>下载此图片</span></div><div class="rightMenu-item" id="menu-newwindowimg"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开图片</span></div><div class="rightMenu-item" id="menu-search"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>站内搜索</span></div><div class="rightMenu-item" id="menu-searchBaidu"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>百度搜索</span></div><div class="rightMenu-item" id="menu-music-toggle"><i class="anzhiyufont anzhiyu-icon-play"></i><span>播放音乐</span></div><div class="rightMenu-item" id="menu-music-back"><i class="anzhiyufont anzhiyu-icon-backward"></i><span>切换到上一首</span></div><div class="rightMenu-item" id="menu-music-forward"><i class="anzhiyufont anzhiyu-icon-forward"></i><span>切换到下一首</span></div><div class="rightMenu-item" id="menu-music-playlist" onclick="window.open(&quot;https://music.163.com/#/playlist?id=6647175851&quot;, &quot;_blank&quot;);" style="display: none;"><i class="anzhiyufont anzhiyu-icon-radio"></i><span>查看所有歌曲</span></div><div class="rightMenu-item" id="menu-music-copyMusicName"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制歌名</span></div></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item menu-link" id="menu-randomPost"><i class="anzhiyufont anzhiyu-icon-shuffle"></i><span>随便逛逛</span></a><a class="rightMenu-item menu-link" href="/categories/"><i class="anzhiyufont anzhiyu-icon-cube"></i><span>博客分类</span></a><a class="rightMenu-item menu-link" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags"></i><span>文章标签</span></a></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item" id="menu-copy" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制地址</span></a><a class="rightMenu-item" id="menu-commentBarrage" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="anzhiyufont anzhiyu-icon-message"></i><span class="menu-commentBarrage-text">关闭热评</span></a><a class="rightMenu-item" id="menu-darkmode" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span class="menu-darkmode-text">深色模式</span></a><a class="rightMenu-item" id="menu-translate" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="anzhiyufont anzhiyu-icon-language"></i><span>轉為繁體</span></a></div></div><div id="rightmenu-mask"></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.cbd.int/@fancyapps/ui@5.0.20/dist/fancybox/fancybox.umd.js"></script><script src="https://cdn.cbd.int/instant.page@5.2.0/instantpage.js" type="module"></script><script src="https://cdn.cbd.int/vanilla-lazyload@17.8.4/dist/lazyload.iife.min.js"></script><script src="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.cbd.int/pangu@4.0.7/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><canvas id="universe"></canvas><script async src="https://npm.elemecdn.com/anzhiyu-theme-static@1.0.0/dark/dark.js"></script><script async src="/anzhiyu/random.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>(() => {
+  const init = () => {
+    twikoo.init(Object.assign({
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo.aciano.top/',
+      region: '',
+      onCommentLoaded: () => {
+        anzhiyu.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      }
+    }, null))
+  }
+
+  const loadTwikoo = () => {
+    if (typeof twikoo === 'object') setTimeout(runFn,0)
+    else getScript('https://cdn.cbd.int/twikoo@1.6.17/dist/twikoo.all.min.js').then(runFn)
+  }
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo.aciano.top/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const runFn = () => {
+    init();
+    GLOBAL_CONFIG_SITE.isPost && getCount()
+  }
+
+  if ('Twikoo' === 'Twikoo' || !true) {
+    if (true) anzhiyu.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else {
+      loadTwikoo()
+    }
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script><input type="hidden" name="page-type" id="page-type" value="post"></div><script>window.addEventListener('load', () => {
+  const changeContent = (content) => {
+    if (content === '') return content
+
+    content = content.replace(/<img.*?src="(.*?)"?[^\>]+>/ig, '[图片]') // replace image link
+    content = content.replace(/<a[^>]+?href=["']?([^"']+)["']?[^>]*>([^<]+)<\/a>/gi, '[链接]') // replace url
+    content = content.replace(/<pre><code>.*?<\/pre>/gi, '[代码]') // replace code
+    content = content.replace(/<[^>]+>/g,"") // remove html tag
+
+    if (content.length > 150) {
+      content = content.substring(0,150) + '...'
+    }
+    return content
+  }
+
+  const getComment = () => {
+    const runTwikoo = () => {
+      twikoo.getRecentComments({
+        envId: 'https://twikoo.aciano.top/',
+        region: '',
+        pageSize: 6,
+        includeReply: true
+      }).then(function (res) {
+        const twikooArray = res.map(e => {
+          return {
+            'content': changeContent(e.comment),
+            'avatar': e.avatar,
+            'nick': e.nick,
+            'url': e.url + '#' + e.id,
+            'date': new Date(e.created).toISOString()
+          }
+        })
+
+        saveToLocal.set('twikoo-newest-comments', JSON.stringify(twikooArray), 10/(60*24))
+        generateHtml(twikooArray)
+      }).catch(function (err) {
+        const $dom = document.querySelector('#card-newest-comments .aside-list')
+        $dom.textContent= "无法获取评论，请确认相关配置是否正确"
+      })
+    }
+
+    if (typeof twikoo === 'object') {
+      runTwikoo()
+    } else {
+      getScript('https://cdn.cbd.int/twikoo@1.6.17/dist/twikoo.all.min.js').then(runTwikoo)
+    }
+  }
+
+  const generateHtml = array => {
+    let result = ''
+
+    if (array.length) {
+      for (let i = 0; i < array.length; i++) {
+        result += '<div class=\'aside-list-item\'>'
+
+        if (true) {
+          const name = 'data-lazy-src'
+          result += `<a href='${array[i].url}' class='thumbnail'><img ${name}='${array[i].avatar}' alt='${array[i].nick}'></a>`
+        }
+        
+        result += `<div class='content'>
+        <a class='comment' href='${array[i].url}' title='${array[i].content}'>${array[i].content}</a>
+        <div class='name'><span>${array[i].nick} / </span><time datetime="${array[i].date}">${anzhiyu.diffDate(array[i].date, true)}</time></div>
+        </div></div>`
+      }
+    } else {
+      result += '没有评论'
+    }
+
+    let $dom = document.querySelector('#card-newest-comments .aside-list')
+    $dom.innerHTML= result
+    window.lazyLoadInstance && window.lazyLoadInstance.update()
+    window.pjax && window.pjax.refresh($dom)
+  }
+
+  const newestCommentInit = () => {
+    if (document.querySelector('#card-newest-comments .aside-list')) {
+      const data = saveToLocal.get('twikoo-newest-comments')
+      if (data) {
+        generateHtml(JSON.parse(data))
+      } else {
+        getComment()
+      }
+    }
+  }
+
+  newestCommentInit()
+  document.addEventListener('pjax:complete', newestCommentInit)
+})</script><script async data-pjax src="https://npm.elemecdn.com/anzhiyu-theme-static@1.0.1/bubble/bubble.js"></script><script>var visitorMail = "visitor@aciano.top";</script><script async data-pjax src="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/waterfall/waterfall.js"></script><script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/qrcodejs/1.0.0/qrcode.min.js"></script><script src="/js/anzhiyu/right_click_menu.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.9/icon/ali_iconfont_css.css"><script src="/js/jump.js" type="text/javascript"></script><script src="https://cdn1.tianli0.top/npm/aciano-cdn@1.0.10/js/smooth-scrolling.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/aplayer/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.cbd.int/anzhiyu-blog-static@1.0.1/js/APlayer.min.js"></script><script src="https://cdn.cbd.int/hexo-anzhiyu-music@1.0.1/assets/js/Meting2.min.js"></script><script src="https://cdn.cbd.int/pjax@0.2.8/pjax.min.js"></script><script>let pjaxSelectors = ["meta[property=\"og:image\"]","meta[property=\"og:title\"]","meta[property=\"og:url\"]","meta[property=\"og:type\"]","meta[property=\"og:site_name\"]","meta[property=\"og:description\"]","head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"]):not([href="/link/"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+  // removeEventListener scroll 
+  anzhiyu.removeGlobalFnEvent('pjax')
+  anzhiyu.removeGlobalFnEvent('themeChange')
+
+  document.getElementById('rightside').classList.remove('rightside-show')
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', e => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><script charset="UTF-8" src="https://cdn.cbd.int/anzhiyu-theme-static@1.1.5/accesskey/accesskey.js"></script></div><div id="popup-window"><div class="popup-window-title">通知</div><div class="popup-window-divider"></div><div class="popup-window-content"><div class="popup-tip">你好呀</div><div class="popup-link"><i class="anzhiyufont anzhiyu-icon-arrow-circle-right"></i></div></div></div></body></html>
