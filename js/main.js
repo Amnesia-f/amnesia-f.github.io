@@ -9,9 +9,6 @@ var anzhiyu_intype = false;
 var anzhiyu_keyUpEvent_timeoutId = null;
 var anzhiyu_keyUpShiftDelayEvent_timeoutId = null;
 
-// 右键菜单对象
-var rm = null;
-
 var popupWindowTimer = null;
 
 var adjectives = [
@@ -224,45 +221,51 @@ document.addEventListener("DOMContentLoaded", function () {
     const highLight = GLOBAL_CONFIG.highlight;
     if (!highLight) return;
 
-    const { highlightCopy, highlightLang, highlightHeightLimit, plugin } = highLight;
+    const isHighlightCopy = highLight.highlightCopy;
+    const isHighlightLang = highLight.highlightLang;
     const isHighlightShrink = GLOBAL_CONFIG_SITE.isHighlightShrink;
-    const isShowTool = highlightCopy || highlightLang || isHighlightShrink !== undefined;
+    const highlightHeightLimit = highLight.highlightHeightLimit;
+    const isShowTool = isHighlightCopy || isHighlightLang || isHighlightShrink !== undefined;
     const $figureHighlight =
-      plugin === "highlight.js"
+      highLight.plugin === "highlighjs"
         ? document.querySelectorAll("figure.highlight")
         : document.querySelectorAll('pre[class*="language-"]');
 
     if (!((isShowTool || highlightHeightLimit) && $figureHighlight.length)) return;
 
-    const isPrismjs = plugin === "prismjs";
+    const isPrismjs = highLight.plugin === "prismjs";
+
+    let highlightShrinkEle = "";
+    let highlightCopyEle = "";
     const highlightShrinkClass = isHighlightShrink === true ? "closed" : "";
-    const highlightShrinkEle =
-      isHighlightShrink !== undefined
-        ? '<i class="anzhiyufont anzhiyu-icon-angle-down expand ${highlightShrinkClass}"></i>'
-        : "";
-    const highlightCopyEle = highlightCopy
-      ? '<div class="copy-notice"></div><i class="anzhiyufont anzhiyu-icon-paste copy-button"></i>'
-      : "";
 
-    const alertInfo = (ele, text) => {
-      if (GLOBAL_CONFIG.Snackbar !== undefined) {
-        anzhiyu.snackbarShow(text);
-      } else {
-        const prevEle = ele.previousElementSibling;
-        prevEle.textContent = text;
-        prevEle.style.opacity = 1;
-        setTimeout(() => {
-          prevEle.style.opacity = 0;
-        }, 800);
-      }
-    };
+    if (isHighlightShrink !== undefined) {
+      highlightShrinkEle = `<i class="anzhiyufont anzhiyu-icon-angle-down expand ${highlightShrinkClass}"></i>`;
+    }
 
-    const copy = ctx => {
+    if (isHighlightCopy) {
+      highlightCopyEle = '<div class="copy-notice"></div><i class="anzhiyufont anzhiyu-icon-paste copy-button"></i>';
+    }
+
+    const copy = (text, ctx) => {
       if (document.queryCommandSupported && document.queryCommandSupported("copy")) {
         document.execCommand("copy");
-        alertInfo(ctx, GLOBAL_CONFIG.copy.success);
+        if (GLOBAL_CONFIG.Snackbar !== undefined) {
+          anzhiyu.snackbarShow(GLOBAL_CONFIG.copy.success);
+        } else {
+          const prevEle = ctx.previousElementSibling;
+          prevEle.innerText = GLOBAL_CONFIG.copy.success;
+          prevEle.style.opacity = 1;
+          setTimeout(() => {
+            prevEle.style.opacity = 0;
+          }, 700);
+        }
       } else {
-        alertInfo(ctx, GLOBAL_CONFIG.copy.noSupport);
+        if (GLOBAL_CONFIG.Snackbar !== undefined) {
+          anzhiyu.snackbarShow(GLOBAL_CONFIG.copy.noSupport);
+        } else {
+          ctx.previousElementSibling.innerText = GLOBAL_CONFIG.copy.noSupport;
+        }
       }
     };
 
@@ -272,17 +275,28 @@ document.addEventListener("DOMContentLoaded", function () {
       $buttonParent.classList.add("copy-true");
       const selection = window.getSelection();
       const range = document.createRange();
-      const preCodeSelector = isPrismjs ? "pre code" : "table .code pre";
-      range.selectNodeContents($buttonParent.querySelectorAll(`${preCodeSelector}`)[0]);
+      if (isPrismjs) range.selectNodeContents($buttonParent.querySelectorAll("pre code")[0]);
+      else range.selectNodeContents($buttonParent.querySelectorAll("table .code pre")[0]);
       selection.removeAllRanges();
       selection.addRange(range);
-      copy(ele.lastChild);
+      const text = selection.toString();
+      copy(text, ele.lastChild);
       selection.removeAllRanges();
       $buttonParent.classList.remove("copy-true");
     };
 
     const highlightShrinkFn = ele => {
-      ele.classList.toggle("closed");
+      const $nextEle = [...ele.parentNode.children].slice(1);
+      ele.firstChild.classList.toggle("closed");
+      if (anzhiyu.isHidden($nextEle[$nextEle.length - 1])) {
+        $nextEle.forEach(e => {
+          e.style.display = "block";
+        });
+      } else {
+        $nextEle.forEach(e => {
+          e.style.display = "none";
+        });
+      }
     };
 
     const highlightToolsFn = function (e) {
@@ -321,29 +335,33 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     };
 
-    if (isPrismjs) {
-      $figureHighlight.forEach(item => {
-        if (highlightLang) {
-          const langName = item.getAttribute("data-language") || "Code";
+    if (isHighlightLang) {
+      if (isPrismjs) {
+        $figureHighlight.forEach(function (item) {
+          const langName = item.getAttribute("data-language") ? item.getAttribute("data-language") : "Code";
           const highlightLangEle = `<div class="code-lang">${langName}</div>`;
           anzhiyu.wrap(item, "figure", { class: "highlight" });
           createEle(highlightLangEle, item);
-        } else {
-          anzhiyu.wrap(item, "figure", { class: "highlight" });
-          createEle("", item);
-        }
-      });
-    } else {
-      $figureHighlight.forEach(item => {
-        if (highlightLang) {
+        });
+      } else {
+        $figureHighlight.forEach(function (item) {
           let langName = item.getAttribute("class").split(" ")[1];
-          if (langName === "plain" || langName === undefined) langName = "Code";
+          if (langName === "plain" || langName === undefined || langName === "plaintext") langName = "Code";
           const highlightLangEle = `<div class="code-lang">${langName}</div>`;
           createEle(highlightLangEle, item, "hl");
-        } else {
+        });
+      }
+    } else {
+      if (isPrismjs) {
+        $figureHighlight.forEach(function (item) {
+          anzhiyu.wrap(item, "figure", { class: "highlight" });
+          createEle("", item);
+        });
+      } else {
+        $figureHighlight.forEach(function (item) {
           createEle("", item, "hl");
-        }
-      });
+        });
+      }
     }
   };
 
@@ -548,7 +566,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return top <= viewPortHeight;
       }
 
-      if (isInViewPortOfOneNoDis(pageBottomDomFlag || percentage > 90) && currentTop > 20) {
+      if (isInViewPortOfOneNoDis(pageBottomDomFlag) || percentage > 90) {
         $navTotop.classList.add("long");
         $percentBtn.textContent = "返回顶部";
       } else {
@@ -682,26 +700,37 @@ document.addEventListener("DOMContentLoaded", function () {
     let $tocLink, $cardToc, autoScrollToc, isExpand;
     if (isToc) {
       const $cardTocLayout = document.getElementById("card-toc");
-      $cardToc = $cardTocLayout.querySelector(".toc-content");
+      $cardToc = $cardTocLayout.getElementsByClassName("toc-content")[0];
       $tocLink = $cardToc.querySelectorAll(".toc-link");
       isExpand = $cardToc.classList.contains("is-expand");
 
-      // toc元素點擊
-      const tocItemClickFn = e => {
-        const target = e.target.closest(".toc-link");
-        if (!target) return;
+      window.mobileToc = {
+        open: () => {
+          $cardTocLayout.style.cssText = "animation: toc-open .3s; opacity: 1; right: 55px";
+        },
 
+        close: () => {
+          $cardTocLayout.style.animation = "toc-close .2s";
+          setTimeout(() => {
+            $cardTocLayout.style.cssText = "opacity:''; animation: ''; right: ''";
+          }, 100);
+        },
+      };
+
+      // toc元素點擊
+      $cardToc.addEventListener("click", e => {
         e.preventDefault();
+        const target = e.target.classList;
+        if (target.contains("toc-content")) return;
+        const $target = target.contains("toc-link") ? e.target : e.target.parentElement;
         anzhiyu.scrollToDest(
-          anzhiyu.getEleTop(document.getElementById(decodeURI(target.getAttribute("href")).replace("#", ""))) - 60,
+          anzhiyu.getEleTop(document.getElementById(decodeURI($target.getAttribute("href")).replace("#", ""))) - 60,
           300
         );
         if (window.innerWidth < 900) {
-          $cardTocLayout.classList.remove("open");
+          window.mobileToc.close();
         }
-      };
-
-      anzhiyu.addEventListenerPjax($cardToc, "click", tocItemClickFn);
+      });
 
       autoScrollToc = item => {
         const activePosition = item.getBoundingClientRect().top;
@@ -794,9 +823,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!GLOBAL_CONFIG_SITE.isPost) {
       const root = document.querySelector(":root");
       root.style.setProperty("--anzhiyu-bar-background", "var(--anzhiyu-meta-theme-color)");
-      requestAnimationFrame(() => {
-        anzhiyu.initThemeColor();
-      });
+      anzhiyu.initThemeColor();
 
       // 要改回来默认主色;
       document.documentElement.style.setProperty(
@@ -824,7 +851,7 @@ document.addEventListener("DOMContentLoaded", function () {
       $body.classList.add("read-mode");
       const newEle = document.createElement("button");
       newEle.type = "button";
-      newEle.className = "anzhiyufont anzhiyu-icon-xmark exit-readmode";
+      newEle.className = "fas fa-sign-out-alt exit-readmode";
       $body.appendChild(newEle);
 
       const clickFn = () => {
@@ -871,20 +898,9 @@ document.addEventListener("DOMContentLoaded", function () {
       saveToLocal.set("aside-status", saveStatus, 2);
       $htmlDom.toggle("hide-aside");
     },
-    "mobile-toc-button": item => {
+    "mobile-toc-button": () => {
       // Show mobile toc
-      const tocEle = document.getElementById("card-toc");
-      tocEle.style.transformOrigin = `right ${item.getBoundingClientRect().top + 17}px`;
-      tocEle.style.transition = "transform 0.3s ease-in-out";
-      tocEle.classList.toggle("open");
-      tocEle.addEventListener(
-        "transitionend",
-        () => {
-          tocEle.style.transition = "";
-          tocEle.style.transformOrigin = "";
-        },
-        { once: true }
-      );
+      document.getElementById("card-toc").classList.toggle("open");
     },
     "chat-btn": () => {
       // Show chat
@@ -923,8 +939,7 @@ document.addEventListener("DOMContentLoaded", function () {
       target.classList.toggle("hide");
     };
 
-    document.querySelector("#sidebar-menus .menus_items") &&
-      document.querySelector("#sidebar-menus .menus_items").addEventListener("click", handleClickOfSubMenu);
+    document.querySelector("#sidebar-menus .menus_items").addEventListener("click", handleClickOfSubMenu);
   };
 
   /**
@@ -1088,7 +1103,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const commentContainer = document.getElementById("post-comment");
     const handleSwitchBtn = () => {
       commentContainer.classList.toggle("move");
-      if (!switchDone && typeof loadOtherComment === "function") {
+      if (!switchDone) {
         switchDone = true;
         loadOtherComment();
       }
@@ -1222,9 +1237,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!path) {
       // 非文章情况，直接设置不需要请求了
       root.style.setProperty("--anzhiyu-bar-background", "var(--anzhiyu-meta-theme-color)");
-      requestAnimationFrame(() => {
-        anzhiyu.initThemeColor();
-      });
+      anzhiyu.initThemeColor();
 
       // 要改回来默认主色
       document.documentElement.style.setProperty(
@@ -1252,9 +1265,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         root.style.setProperty("--anzhiyu-bar-background", value);
-        requestAnimationFrame(() => {
-          anzhiyu.initThemeColor();
-        });
+        anzhiyu.initThemeColor();
 
         if (GLOBAL_CONFIG.mainTone.cover_change) {
           document.documentElement.style.setProperty("--anzhiyu-main", value);
@@ -1289,9 +1300,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             root.style.setProperty("--anzhiyu-bar-background", value);
-            requestAnimationFrame(() => {
-              anzhiyu.initThemeColor();
-            });
+            anzhiyu.initThemeColor();
 
             if (GLOBAL_CONFIG.mainTone.cover_change) {
               document.documentElement.style.setProperty("--anzhiyu-main", value);
@@ -1318,9 +1327,7 @@ document.addEventListener("DOMContentLoaded", function () {
                   }
 
                   root.style.setProperty("--anzhiyu-bar-background", value);
-                  requestAnimationFrame(() => {
-                    anzhiyu.initThemeColor();
-                  });
+                  anzhiyu.initThemeColor();
 
                   if (GLOBAL_CONFIG.mainTone.cover_change) {
                     document.documentElement.style.setProperty("--anzhiyu-main", value);
@@ -1335,32 +1342,24 @@ document.addEventListener("DOMContentLoaded", function () {
                   }
                 } else {
                   root.style.setProperty("--anzhiyu-bar-background", fallbackValue);
-                  requestAnimationFrame(() => {
-                    anzhiyu.initThemeColor();
-                  });
+                  anzhiyu.initThemeColor();
                   document.documentElement.style.setProperty("--anzhiyu-main", fallbackValue);
                 }
               } catch {
                 root.style.setProperty("--anzhiyu-bar-background", fallbackValue);
-                requestAnimationFrame(() => {
-                  anzhiyu.initThemeColor();
-                });
+                anzhiyu.initThemeColor();
                 document.documentElement.style.setProperty("--anzhiyu-main", fallbackValue);
               }
             } else {
               root.style.setProperty("--anzhiyu-bar-background", fallbackValue);
-              requestAnimationFrame(() => {
-                anzhiyu.initThemeColor();
-              });
+              anzhiyu.initThemeColor();
               document.documentElement.style.setProperty("--anzhiyu-main", fallbackValue);
             }
           }
         } catch (err) {
           console.error("Error fetching data:", err);
           root.style.setProperty("--anzhiyu-bar-background", fallbackValue);
-          requestAnimationFrame(() => {
-            anzhiyu.initThemeColor();
-          });
+          anzhiyu.initThemeColor();
           document.documentElement.style.setProperty("--anzhiyu-main", fallbackValue);
         }
       }
@@ -1450,7 +1449,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // 监听nav是否被其他音频暂停⏸️
   const listenNavMusicPause = function () {
     const timer = setInterval(() => {
-      if (navMusicEl && navMusicEl.querySelector("#nav-music meting-js").aplayer) {
+      if (navMusicEl.querySelector("#nav-music meting-js").aplayer) {
         clearInterval(timer);
         let msgPlay = '<i class="anzhiyufont anzhiyu-icon-play"></i><span>播放音乐</span>';
         let msgPause = '<i class="anzhiyufont anzhiyu-icon-pause"></i><span>暂停音乐</span>';
@@ -1590,7 +1589,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (isEscapeKeyPressed) {
         anzhiyu.hideLoading();
         anzhiyu.hideConsole();
-        rm && rm.hideRightMenu();
+        rm.hideRightMenu();
       }
       const shortcutKeyDelay = GLOBAL_CONFIG.shortcutKey.delay ? GLOBAL_CONFIG.shortcutKey.delay : 100;
       const shortcutKeyShiftDelay = GLOBAL_CONFIG.shortcutKey.shiftDelay ? GLOBAL_CONFIG.shortcutKey.shiftDelay : 200;
@@ -1798,8 +1797,6 @@ document.addEventListener("DOMContentLoaded", function () {
     anzhiyu.switchRightClickMenuHotReview();
     anzhiyu.getCustomPlayList();
     anzhiyu.addEventListenerConsoleMusicList(false);
-    anzhiyu.initPaginationObserver();
-
     setTimeout(() => {
       setInputFocusListener();
       if (typeof addFriendLinksInFooter === "function") {

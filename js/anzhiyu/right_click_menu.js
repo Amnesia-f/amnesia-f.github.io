@@ -1,5 +1,5 @@
 // 初始化函数
-rm = {};
+let rm = {};
 
 //禁止图片与超链接拖拽
 let aElements = document.getElementsByTagName("a");
