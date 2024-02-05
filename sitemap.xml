@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://aciano.top/posts/mouban/</loc>
+    
+    <lastmod>2024-02-05</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://aciano.top/work/index.html</loc>
     
     <lastmod>2024-02-01</lastmod>
