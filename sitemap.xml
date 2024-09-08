@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://aciano.top/categories/index.html</loc>
+    
+    <lastmod>2024-09-08</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://aciano.top/class20/index.html</loc>
     
     <lastmod>2024-09-08</lastmod>
@@ -425,15 +434,6 @@
   </url>
   
   <url>
-    <loc>https://aciano.top/about/index.html</loc>
-    
-    <lastmod>2024-09-08</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://aciano.top/album/index.html</loc>
     
     <lastmod>2024-09-08</lastmod>
@@ -443,7 +443,7 @@
   </url>
   
   <url>
-    <loc>https://aciano.top/categories/index.html</loc>
+    <loc>https://aciano.top/about/index.html</loc>
     
     <lastmod>2024-09-08</lastmod>
     
