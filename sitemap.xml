@@ -2,33 +2,6 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://aciano.top/work/index.html</loc>
-    
-    <lastmod>2026-02-17</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://aciano.top/collect/index.html</loc>
-    
-    <lastmod>2026-02-17</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://aciano.top/comments/index.html</loc>
-    
-    <lastmod>2026-02-17</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://aciano.top/copyright/index.html</loc>
     
     <lastmod>2026-02-17</lastmod>
@@ -38,7 +11,7 @@
   </url>
   
   <url>
-    <loc>https://aciano.top/cookies/index.html</loc>
+    <loc>https://aciano.top/equipment/index.html</loc>
     
     <lastmod>2026-02-17</lastmod>
     
@@ -48,15 +21,6 @@
   
   <url>
     <loc>https://aciano.top/essay/index.html</loc>
-    
-    <lastmod>2026-02-17</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://aciano.top/equipment/index.html</loc>
     
     <lastmod>2026-02-17</lastmod>
     
@@ -137,7 +101,7 @@
   </url>
   
   <url>
-    <loc>https://aciano.top/posts/824f/</loc>
+    <loc>https://aciano.top/work/index.html</loc>
     
     <lastmod>2026-02-17</lastmod>
     
@@ -227,7 +191,25 @@
   </url>
   
   <url>
-    <loc>https://aciano.top/posts/kmodel/</loc>
+    <loc>https://aciano.top/collect/index.html</loc>
+    
+    <lastmod>2026-02-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://aciano.top/comments/index.html</loc>
+    
+    <lastmod>2026-02-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://aciano.top/cookies/index.html</loc>
     
     <lastmod>2026-02-17</lastmod>
     
@@ -326,7 +308,7 @@
   </url>
   
   <url>
-    <loc>https://aciano.top/posts/7594/</loc>
+    <loc>https://aciano.top/posts/824f/</loc>
     
     <lastmod>2026-02-17</lastmod>
     
@@ -416,6 +398,15 @@
   </url>
   
   <url>
+    <loc>https://aciano.top/posts/kmodel/</loc>
+    
+    <lastmod>2026-02-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://aciano.top/posts/f7a/</loc>
     
     <lastmod>2026-02-17</lastmod>
@@ -444,6 +435,24 @@
   
   <url>
     <loc>https://aciano.top/posts/ac2c/</loc>
+    
+    <lastmod>2026-02-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://aciano.top/posts/7594/</loc>
+    
+    <lastmod>2026-02-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://aciano.top/posts/2023-report/</loc>
     
     <lastmod>2026-02-17</lastmod>
     
@@ -579,15 +588,6 @@
   
   <url>
     <loc>https://aciano.top/posts/60c319f6/</loc>
-    
-    <lastmod>2026-02-17</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://aciano.top/posts/2023-report/</loc>
     
     <lastmod>2026-02-17</lastmod>
     
@@ -970,14 +970,14 @@
   </url>
   
   <url>
-    <loc>https://aciano.top/tags/Arduino/</loc>
+    <loc>https://aciano.top/tags/App-Inventor/</loc>
     <lastmod>2026-02-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://aciano.top/tags/App-Inventor/</loc>
+    <loc>https://aciano.top/tags/Arduino/</loc>
     <lastmod>2026-02-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1168,14 +1168,14 @@
   </url>
   
   <url>
-    <loc>https://aciano.top/categories/Arduino/</loc>
+    <loc>https://aciano.top/categories/AppInventor/</loc>
     <lastmod>2026-02-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://aciano.top/categories/AppInventor/</loc>
+    <loc>https://aciano.top/categories/Arduino/</loc>
     <lastmod>2026-02-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
