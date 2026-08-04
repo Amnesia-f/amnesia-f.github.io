@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /work
+Disallow: /class6
+
+Sitemap: https://aciano.top/sitemap.xml
